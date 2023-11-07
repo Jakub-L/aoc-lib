@@ -1,0 +1,25 @@
+{
+  "name": "@jakub-l/aoc-lib",
+  "version": "0.1.0",
+  "description": "Collection of utility functions for the Advent of Code challenge",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Jakub-L/aoc-lib.git"
+  },
+  "keywords": [
+    "advent",
+    "of",
+    "code",
+    "aoc"
+  ],
+  "author": "Jakub L.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jakub-L/aoc-lib/issues"
+  },
+  "homepage": "https://github.com/Jakub-L/aoc-lib#readme"
+}
