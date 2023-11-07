@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "ES2015",
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "declaration": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "lib"]
+}

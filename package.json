@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "description": "Collection of utility functions for the Advent of Code challenge",
   "main": "./lib/index.js",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib && ./node_modules/.bin/tsc"
   },
