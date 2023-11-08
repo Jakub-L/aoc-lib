@@ -6,12 +6,16 @@
   "types": "./lib/index.d.ts",
   "exports": {
     ".": "./lib/index.js",
-    "./input-parsing": "./lib/input-parsing/index.js"
+    "./input-parsing": "./lib/input-parsing/index.js",
+    "./pathfinding": "./lib/pathfinding/index.js"
   },
   "typesVersions": {
     "*": {
       "input-parsing": [
         "./lib/input-parsing/index.d.ts"
+      ],
+      "pathfinding": [
+        "./lib/pathfinding/index.d.ts"
       ]
     }
   },
