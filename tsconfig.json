@@ -1,14 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "ES2015",
-    "rootDir": "./src",
+    "target": "es2017",
+    "module": "CommonJS",
     "outDir": "./lib",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "declaration": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true
+    "declaration": true
   },
   "exclude": ["node_modules", "lib", "test"]
 }

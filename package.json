@@ -3,10 +3,18 @@
   "version": "0.1.0",
   "description": "Collection of utility functions for the Advent of Code challenge",
   "main": "./lib/index.js",
-  "exports": {
-    ".": "./lib/index.js"
-  },
   "types": "./lib/index.d.ts",
+  "exports": {
+    ".": "./lib/index.js",
+    "./input-parsing": "./lib/input-parsing/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "input-parsing": [
+        "./lib/input-parsing/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build": "rm -rf ./lib && ./node_modules/.bin/tsc",
     "test": "jest --verbose --coverage"
