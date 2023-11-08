@@ -1,4 +1,23 @@
-import { split } from "../src/input-parsing/read-file";
+import * as fs from "fs";
+import { split, readFile } from "../src/input-parsing/read-file";
+
+describe("readFile", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  it("splits file by line if no delimiters provided", () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => "Hello World\nHello Mum");
+    expect(readFile("")).toEqual(["Hello World", "Hello Mum"]);
+  });
+  it("uses an identity function as default converter", () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => "1\n2");
+    expect(readFile("", ["\n"])).toEqual(["1", "2"]);
+  });
+  it("allows custom converter function", () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => "1\n2");
+    expect(readFile("", ["\n"], Number)).toEqual([1, 2]);
+  });
+});
 
 describe("split", () => {
   it("returns the original string if given no delimiters", () => {
@@ -37,6 +56,9 @@ describe("split", () => {
     expect(split("Hello World", [], s => s.toUpperCase())).toBe("HELLO WORLD");
   });
   it("applies converter function only once all splitting completes", () => {
-    expect(split("123 456", [" ", ""], Number)).toEqual([[1, 2, 3], [4, 5, 6]]);
+    expect(split("123 456", [" ", ""], Number)).toEqual([
+      [1, 2, 3],
+      [4, 5, 6]
+    ]);
   });
 });
