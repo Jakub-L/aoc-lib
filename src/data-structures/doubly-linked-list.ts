@@ -50,6 +50,23 @@ export class DoublyLinkedList<T> {
     this._addLast(value);
   }
 
+  addAt(index: number, value: T) {
+  }
+
+  removeValue(value: T) {
+  } 
+
+  removeAt(index: number) {
+  }
+
+  indexOf(value: T) {
+  }
+
+  includes(value: T) {
+  }
+
+  toString() {  }
+
   /**
    * Adds a new node with the given value to the end of the list.
    * @param value The value to add to the list.
