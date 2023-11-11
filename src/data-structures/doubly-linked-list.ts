@@ -50,22 +50,30 @@ export class DoublyLinkedList<T> {
     this._addLast(value);
   }
 
-  addAt(index: number, value: T) {
+  addAt(index: number, value: T) {}
+
+  removeValue(value: T) {}
+
+  removeAt(index: number) {}
+
+  indexOf(value: T) {}
+
+  includes(value: T) {}
+
+  /**
+   * Returns a string representation of the list.
+   * @returns {string} Comma-separated list of node values stringified
+   */
+  toString(): string {
+    if (this.isEmpty) return "[ ]";
+    const results = [];
+    let node = this._head;
+    while (node) {
+      results.push(node.toString());
+      node = node.next;
+    }
+    return `[ ${results.join(", ")} ]`;
   }
-
-  removeValue(value: T) {
-  } 
-
-  removeAt(index: number) {
-  }
-
-  indexOf(value: T) {
-  }
-
-  includes(value: T) {
-  }
-
-  toString() {  }
 
   /**
    * Adds a new node with the given value to the end of the list.
@@ -77,7 +85,7 @@ export class DoublyLinkedList<T> {
       this._head = node;
       this._tail = node;
     } else {
-      const node = new DoublyLinkedNode(value, this._tail, null);
+      const node = new DoublyLinkedNode(value, null, this._tail);
       this._tail.next = node;
       this._tail = node;
     }
@@ -105,6 +113,7 @@ export class DoublyLinkedList<T> {
    * @returns {T} The value of the first node in the list.
    */
   get headValue(): T {
+    if (this.isEmpty) throw new Error("List is empty");
     return this._head.value;
   }
 
@@ -113,6 +122,7 @@ export class DoublyLinkedList<T> {
    * @returns {T} The value of the last node in the list.
    */
   get tailValue(): T {
+    if (this.isEmpty) throw new Error("List is empty");
     return this._tail.value;
   }
 }
