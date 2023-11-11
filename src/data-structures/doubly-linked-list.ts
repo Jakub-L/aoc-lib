@@ -1,4 +1,5 @@
 /**
+ * @class DoublyLinkedNode
  * Represents a node in a doubly linked list.
  * @template T The type of the value stored in the node.
  */
@@ -31,16 +32,29 @@ class DoublyLinkedNode<T> {
   }
 }
 
+/**
+ * @class DoublyLinkedList
+ * A doubly linked list data structure.
+ * @template T The type of the elements stored in the list.
+ */
 export class DoublyLinkedList<T> {
   private _size: number = 0;
   private _head: DoublyLinkedNode<T> | null = null;
   private _tail: DoublyLinkedNode<T> | null = null;
 
   /**
+   * Adds an element to the list (to the end of it)
+   * @param {T} value The value to add to the list.
+   */
+  add(value: T) {
+    this._addLast(value);
+  }
+
+  /**
    * Adds a new node with the given value to the end of the list.
    * @param value The value to add to the list.
    */
-  addLast(value: T) {
+  private _addLast(value: T) {
     if (this.isEmpty) {
       const node = new DoublyLinkedNode(value, null, null);
       this._head = node;
@@ -53,18 +67,34 @@ export class DoublyLinkedList<T> {
     this._size++;
   }
 
+  /**
+   * Gets the size of the list
+   * @returns {number} The size of the list.
+   */
   get size(): number {
     return this._size;
   }
 
+  /**
+   * Gets a value indicating whether the list is empty.
+   * @returns {boolean} True if list is empty.
+   */
   get isEmpty(): boolean {
     return this._size === 0;
   }
 
+  /**
+   * Gets the value of the first node in the list.
+   * @returns {T} The value of the first node in the list.
+   */
   get headValue(): T {
     return this._head.value;
   }
 
+  /**
+   * Gets the value of the last node in the list.
+   * @returns {T} The value of the last node in the list.
+   */
   get tailValue(): T {
     return this._tail.value;
   }
