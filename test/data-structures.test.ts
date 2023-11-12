@@ -71,6 +71,11 @@ describe("DoublyLinkedList", () => {
       list.add("b");
       expect(list.size).toBe(2);
     });
+    it("allows chaining of insertions", () => {
+      list.add("a").add("b").add("c");
+      expect(list.toString()).toBe("[ a, b, c ]");
+      expect(list.size).toBe(3);
+    });
   });
   describe("addAt", () => {
     it("throws an error if given index lower than zero", () => {
@@ -102,7 +107,7 @@ describe("DoublyLinkedList", () => {
       list.add("c");
       list.addAt(1, "d");
       expect(list.toString()).toBe("[ a, d, b, c ]");
-    })
+    });
     it("shifts elements with consecutive inserts at the same index", () => {
       list.add("a");
       list.add("b");
@@ -110,13 +115,18 @@ describe("DoublyLinkedList", () => {
       list.addAt(1, "d");
       list.addAt(1, "e");
       expect(list.toString()).toBe("[ a, e, d, b, c ]");
-    })
+    });
     it("correctly updates size on insertion", () => {
       list.addAt(0, "a");
       expect(list.size).toBe(1);
       list.addAt(1, "b");
       expect(list.size).toBe(2);
       list.addAt(1, "c");
+      expect(list.size).toBe(3);
+    });
+    it("allows chaining of insertions", () => {
+      list.addAt(0, "a").addAt(0, "b").addAt(1, "c");
+      expect(list.toString()).toBe("[ b, c, a ]");
       expect(list.size).toBe(3);
     });
   });
