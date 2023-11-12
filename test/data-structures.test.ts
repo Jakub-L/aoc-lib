@@ -96,6 +96,29 @@ describe("DoublyLinkedList", () => {
       list.addAt(2, "c");
       expect(list.tailValue).toBe("c");
     });
+    it("inserts at the correct index", () => {
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      list.addAt(1, "d");
+      expect(list.toString()).toBe("[ a, d, b, c ]");
+    })
+    it("shifts elements with consecutive inserts at the same index", () => {
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      list.addAt(1, "d");
+      list.addAt(1, "e");
+      expect(list.toString()).toBe("[ a, e, d, b, c ]");
+    })
+    it("correctly updates size on insertion", () => {
+      list.addAt(0, "a");
+      expect(list.size).toBe(1);
+      list.addAt(1, "b");
+      expect(list.size).toBe(2);
+      list.addAt(1, "c");
+      expect(list.size).toBe(3);
+    });
   });
   describe("toString", () => {
     it("returns an empty string for an empty list", () => {

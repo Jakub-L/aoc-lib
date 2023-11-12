@@ -7,20 +7,21 @@ class DoublyLinkedNode<T> {
   /** The value stored in the node. */
   value: T;
   /** The next node in the list. */
-  next: DoublyLinkedNode<T> | null = null;
+  next: DoublyLinkedNode<T> | null;
   /** The previous node in the list. */
-  prev: DoublyLinkedNode<T> | null = null;
+  prev: DoublyLinkedNode<T> | null;
 
   /**
+   *
    * Creates a new instance of `DoublyLinkedNode`.
-   * @param value The value to store in the node.
-   * @param next The next node in the list.
-   * @param prev The previous node in the list.
+   * @param {T} value The value to store in the node.
+   * @param {DoublyLinkedNode | null} next The next node in the list.
+   * @param {DoublyLinkedNode | null} prev The previous node in the list.
    */
-  constructor(value: T, next: DoublyLinkedNode<T> | null = null, prev: DoublyLinkedNode<T> | null = null) {
+  constructor(value: T, prev: DoublyLinkedNode<T> | null, next: DoublyLinkedNode<T> | null) {
     this.value = value;
-    this.next = next;
     this.prev = prev;
+    this.next = next;
   }
 
   /**
@@ -43,14 +44,34 @@ export class DoublyLinkedList<T> {
   private _tail: DoublyLinkedNode<T> | null = null;
 
   /**
-   * Adds an element to the list (to the end of it)
-   * @param {T} value The value to add to the list.
+   * Adds an element to the end of the list
+   * @param {T} value The value to add.
+   * @returns {DoublyLinkedList<T>} The list after insertion
    */
-  add(value: T) {
-    this._addLast(value);
+  add(value: T): DoublyLinkedList<T> {
+    return this._addLast(value);
   }
 
-  addAt(index: number, value: T) {}
+  /**
+   * Adds an element at a specific index
+   * @param {number} index The index to insert at
+   * @param {T} value The value to add
+   * @returns {DoublyLinkedList<T>} The list after insertion
+   * @throws {Error} If index is less than 0 or greater than list size
+   */
+  addAt(index: number, value: T): DoublyLinkedList<T> {
+    if (index < 0 || index > this.size) throw new Error("Index out of bounds");
+    if (index === this.size) return this._addLast(value);
+    if (index === 0) return this._addFirst(value);
+    else {
+      let oldNode = this._head;
+      for (let i = 0; i < index; i++) oldNode = oldNode.next;
+      const newNode = new DoublyLinkedNode(value, oldNode.prev, oldNode);
+      oldNode.prev.next = oldNode.prev = newNode;
+      this._size++;
+      return this;
+    }
+  }
 
   removeValue(value: T) {}
 
@@ -77,19 +98,32 @@ export class DoublyLinkedList<T> {
 
   /**
    * Adds a new node with the given value to the end of the list.
-   * @param value The value to add to the list.
+   * @param {T} value The value to add to the list.
+   * @returns {DoublyLinkedList<T>} The list after insertion
    */
-  private _addLast(value: T) {
-    if (this.isEmpty) {
-      const node = new DoublyLinkedNode(value, null, null);
-      this._head = node;
-      this._tail = node;
-    } else {
-      const node = new DoublyLinkedNode(value, null, this._tail);
-      this._tail.next = node;
-      this._tail = node;
+  private _addLast(value: T): DoublyLinkedList<T> {
+    if (this.isEmpty) this._head = this._tail = new DoublyLinkedNode(value, null, null);
+    else {
+      this._tail.next = new DoublyLinkedNode(value, this._tail, null);
+      this._tail = this._tail.next;
     }
     this._size++;
+    return this;
+  }
+
+  /**
+   * Adds a new node with the given value to the beginning of the list.
+   * @param {T} value The value to add to the list.
+   * @returns {DoublyLinkedList<T>} The list after insertion
+   */
+  private _addFirst(value: T): DoublyLinkedList<T> {
+    if (this.isEmpty) this._head = this._tail = new DoublyLinkedNode(value, null, null);
+    else {
+      this._head.prev = new DoublyLinkedNode(value, null, this._head);
+      this._head = this._head.prev;
+    }
+    this._size++;
+    return this;
   }
 
   /**
@@ -111,6 +145,7 @@ export class DoublyLinkedList<T> {
   /**
    * Gets the value of the first node in the list.
    * @returns {T} The value of the first node in the list.
+   * @throws {Error} If list is empty.
    */
   get headValue(): T {
     if (this.isEmpty) throw new Error("List is empty");
@@ -120,6 +155,7 @@ export class DoublyLinkedList<T> {
   /**
    * Gets the value of the last node in the list.
    * @returns {T} The value of the last node in the list.
+   * @throws {Error} If list is empty.
    */
   get tailValue(): T {
     if (this.isEmpty) throw new Error("List is empty");
