@@ -86,6 +86,11 @@ describe("DoublyLinkedList", () => {
       list.add("b");
       expect(() => list.addAt(5, "c")).toThrow();
     });
+    it("sets head and tail to the same value for an empty list", () => {
+      list.addAt(0, "a");
+      expect(list.headValue).toBe("a");
+      expect(list.tailValue).toBe("a");
+    });
     it("adds to the beginning of the list if index is 0", () => {
       list.addAt(0, "a");
       expect(list.headValue).toBe("a");
