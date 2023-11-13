@@ -130,6 +130,30 @@ describe("DoublyLinkedList", () => {
       expect(list.size).toBe(3);
     });
   });
+  describe("includes", () => {
+    it("returns false for an empty list", () => {
+      expect(list.includes("a")).toBe(false);
+    });
+    it("returns true for an element present in a list", () => {
+      list.add("a");
+      expect(list.includes("a")).toBe(true);
+    });
+    it("returns false for an element not present in a list", () => {
+      list.add("a");
+      expect(list.includes("b")).toBe(false);
+    });
+    it("checks reference types by value", () => {
+      const arr = ["a", "b", "c"];
+      list.add(arr);
+      expect(list.includes(arr)).toBe(true);
+      expect(list.includes(["a", "b", "c"])).toBe(true);
+    });
+    it("order of keys does not matter for objects", () => {
+      const objectList = new DoublyLinkedList<Record<string, number>>();
+      objectList.add({ a: 1, b: 2 });
+      expect(objectList.includes({ b: 2, a: 1 })).toBe(true);
+    })
+  })
   describe("toString", () => {
     it("returns an empty string for an empty list", () => {
       expect(list.toString()).toBe("[ ]");
