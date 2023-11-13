@@ -115,6 +115,26 @@ describe("deepEqual", () => {
     });
   });
   describe("compares objects", () => {
-    xit("", () => {});
+    xit("returns true for two empty objects", () => {});
+    xit("returns true for objects with same keys and values", () => {});
+    xit("returns true for objects with same keys and values in different order", () => {});
+    xit("returns false if one object has extra keys", () => {});
+    xit("returns false with unequal key values", () => {});
+    xit("returns false with different keys", () => {});
+    xit("returns true for two equal nested objects", () => {});
+    xit("returns false for nested objects with different nested values", () => {});
+    xit("returns false for nested objects with different nested keys", () => {});
+    xit("returns false for empty object and empty array", () => {});
+    xit("returns false for empty object and null", () => {});
+    xit("returns false for empty object and undefined", () => {});
+    xit("returns false for objects with extra undefined properties", () => {});
+    xit("returns true for objects with custom toString methods that return the same value", () => {});
+    xit("returns false for objects with custom toString methods that return differnt values", () => {});
   });
+  describe("compares arrays", () => {});
+  describe("compares functions", () => {});
+  describe("compares RegExps", () => {});
+  describe("compares Maps", () => {});
+  describe("compares Sets", () => {});
+  describe("compares Dates", () => {});
 });
