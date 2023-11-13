@@ -1,3 +1,5 @@
+import { deepEqual } from "../utils/deep-equal";
+
 /**
  * @class DoublyLinkedNode
  * Represents a node in a doubly linked list.
@@ -61,8 +63,8 @@ export class DoublyLinkedList<T> {
    */
   addAt(index: number, value: T): DoublyLinkedList<T> {
     if (index < 0 || index > this.size) throw new Error("Index out of bounds");
-    if (index === this.size) return this._addLast(value);
     if (index === 0) return this._addFirst(value);
+    if (index === this.size) return this._addLast(value);
     else {
       let oldNode = this._head;
       for (let i = 0; i < index; i++) oldNode = oldNode.next;
@@ -79,7 +81,19 @@ export class DoublyLinkedList<T> {
 
   indexOf(value: T) {}
 
-  includes(value: T) {}
+  /**
+   * Checks if a value exists in the list. Performs a deep comparison by value.
+   * @param {T} value Value to find in the list
+   * @returns {boolean} True if value exists in the list, false otherwise
+   */
+  includes(value: T): boolean {
+    let node = this._head;
+    while (node) {
+      if (deepEqual(value, node.value)) return true;
+      node = node.next;
+    }
+    return false;
+  }
 
   /**
    * Returns a string representation of the list.
