@@ -115,26 +115,145 @@ describe("deepEqual", () => {
     });
   });
   describe("compares objects", () => {
-    xit("returns true for two empty objects", () => {});
-    xit("returns true for objects with same keys and values", () => {});
-    xit("returns true for objects with same keys and values in different order", () => {});
-    xit("returns false if one object has extra keys", () => {});
-    xit("returns false with unequal key values", () => {});
-    xit("returns false with different keys", () => {});
-    xit("returns true for two equal nested objects", () => {});
-    xit("returns false for nested objects with different nested values", () => {});
-    xit("returns false for nested objects with different nested keys", () => {});
-    xit("returns false for empty object and empty array", () => {});
-    xit("returns false for empty object and null", () => {});
-    xit("returns false for empty object and undefined", () => {});
-    xit("returns false for objects with extra undefined properties", () => {});
-    xit("returns true for objects with custom toString methods that return the same value", () => {});
-    xit("returns false for objects with custom toString methods that return differnt values", () => {});
+    it("returns true for two empty objects", () => {
+      expect(deepEqual({}, {})).toBe(true);
+    });
+    it("returns true for objects with same keys and values", () => {
+      expect(deepEqual({ a: 1, b: 2 }, { a: 1, b: 2 })).toBe(true);
+    });
+    it("returns true for objects with same keys and values in different order", () => {
+      expect(deepEqual({ a: 1, b: 2 }, { b: 2, a: 1 })).toBe(true);
+    });
+    it("returns false if one object has extra keys", () => {
+      expect(deepEqual({ a: 1, b: 2 }, { a: 1, b: 2, c: 3 })).toBe(false);
+    });
+    it("returns false with unequal key values", () => {
+      expect(deepEqual({ a: 1, b: 2 }, { a: 1, b: 3 })).toBe(false);
+    });
+    it("returns false with different keys", () => {
+      expect(deepEqual({ a: 1, b: 2 }, { a: 1, c: 2 })).toBe(false);
+    });
+    it("returns true for two equal nested objects", () => {
+      expect(deepEqual({ a: { b: 1 } }, { a: { b: 1 } })).toBe(true);
+    });
+    it("returns false for nested objects with different nested values", () => {
+      expect(deepEqual({ a: { b: 1 } }, { a: { b: 2 } })).toBe(false);
+    });
+    it("returns false for nested objects with different nested keys", () => {
+      expect(deepEqual({ a: { b: 1 } }, { a: { c: 1 } })).toBe(false);
+    });
+    it("returns false for empty object and empty array", () => {
+      expect(deepEqual({}, [])).toBe(false);
+    });
+    it("returns false for empty object and null", () => {
+      expect(deepEqual({}, null)).toBe(false);
+    });
+    it("returns false for empty object and undefined", () => {
+      expect(deepEqual({}, undefined)).toBe(false);
+    });
+    it("returns false for objects with extra undefined properties", () => {
+      expect(deepEqual({ a: 1, b: undefined }, { a: 1 })).toBe(false);
+    });
+    it("returns true for objects with custom toString methods that return the same value", () => {
+      expect(deepEqual({ toString: () => "a" }, { toString: () => "a" })).toBe(true);
+    });
+    it("returns false for objects with custom toString methods that return differnt values", () => {
+      expect(deepEqual({ toString: () => "a" }, { toString: () => "b" })).toBe(false);
+    });
   });
-  describe("compares arrays", () => {});
-  describe("compares functions", () => {});
-  describe("compares RegExps", () => {});
-  describe("compares Maps", () => {});
+  describe("compares arrays", () => {
+    it("returns true for two empty arrays", () => {
+      expect(deepEqual([], [])).toBe(true);
+    });
+    it("returns true for equal arrays", () => {
+      expect(deepEqual([1, 2, 3], [1, 2, 3])).toBe(true);
+    });
+    it("returns false for arrays with different values", () => {
+      expect(deepEqual([1, 2, 3], [1, 2, 4])).toBe(false);
+    });
+    it("returns false for arrays of different length", () => {
+      expect(deepEqual([1, 2, 3], [1, 2])).toBe(false);
+    });
+    it("returns false for arrays with same elements in different order", () => {
+      expect(deepEqual([1, 2, 3], [1, 3, 2])).toBe(false);
+    });
+    it("returns true for equal arrays of objects", () => {
+      expect(deepEqual([{ a: 1 }, { b: 2 }], [{ a: 1 }, { b: 2 }])).toBe(true);
+    });
+    it("returns true for arrays of objects with keys in different order", () => {
+      expect(deepEqual([{ a: 1, b: 2 }], [{ b: 2, a: 1 }])).toBe(true);
+    });
+    it("returns false for arrays of objects with different values", () => {
+      expect(deepEqual([{ a: 1, b: 2 }], [{ a: 1, b: 3 }])).toBe(false);
+    });
+    it("returns false for arrays of objects with different keys", () => {
+      expect(deepEqual([{ a: 1, b: 2 }], [{ a: 1, c: 2 }])).toBe(false);
+    });
+    it("returns false for array and array-like objects", () => {
+      expect(deepEqual([1, 2, 3], { 0: 1, 1: 2, 2: 3, length: 3 })).toBe(false);
+    });
+    it("returns false for array and empty object", () => {
+      expect(deepEqual([], {})).toBe(false);
+    });
+    it("returns false for array and null", () => {
+      expect(deepEqual([], null)).toBe(false);
+    });
+    it("returns false for array and undefined", () => {
+      expect(deepEqual([], undefined)).toBe(false);
+    });
+  });
+  describe("compares Dates", () => {
+    it("returns true for equal dates from strings", () => {
+      expect(deepEqual(new Date("2020-01-01"), new Date("2020-01-01"))).toBe(true);
+    });
+    it("returns true for equal dates from description", () => {
+      expect(deepEqual(new Date(2020, 0, 1), new Date(2020, 0, 1))).toBe(true);
+    });
+    it("returns true for equal dates from different constructors", () => {
+      expect(deepEqual(new Date("2020-01-01"), new Date(2020, 0, 1))).toBe(true);
+    });
+    it("returns false for unequal dates", () => {
+      expect(deepEqual(new Date("2020-01-01"), new Date("2020-01-02"))).toBe(false);
+    });
+    it("returns false for date and date-time string", () => {
+      expect(deepEqual(new Date("2020-01-01"), "2020-01-01T00:00:00.000Z")).toBe(false);
+    });
+    it("returns false for date and empty object", () => {
+      expect(deepEqual(new Date("2020-01-01"), {})).toBe(false);
+    });
+    it("returns false for date and date-like object", () => {
+      expect(deepEqual(new Date("2020-01-01"), { valueOf: () => 1577836800000 })).toBe(false);
+    });
+  });
+  describe("compares RegExps", () => {
+    it("returns true for equal regex patterns", () => {
+      expect(deepEqual(/a/, /a/)).toBe(true);
+    });
+    it("returns false for equal regex patterns with different flags", () => {
+      expect(deepEqual(/a/, /a/i)).toBe(false);
+    });
+    it("returns false for unequal regex patterns", () => {
+      expect(deepEqual(/a/, /b/)).toBe(false);
+    });
+    it("returns false for regex and string", () => {
+      expect(deepEqual(/a/, "a")).toBe(false);
+    });
+    it("returns false for regex and empty object", () => {
+      expect(deepEqual(/a/, {})).toBe(false);
+    });
+  });
+  describe("compares functions", () => {
+    it("returns true for the same function", () => {
+      const func = () => {};
+      expect(deepEqual(func, func)).toBe(true);
+    });
+    it("returns false for two different functions with the same return", () => {
+      const funcA = () => 1;
+      const funcB = () => 1;
+      expect(deepEqual(funcA, funcB)).toBe(false);
+    });
+  });
+  describe("compares Maps", () => {
+  });
   describe("compares Sets", () => {});
-  describe("compares Dates", () => {});
 });
