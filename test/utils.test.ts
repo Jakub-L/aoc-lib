@@ -254,6 +254,137 @@ describe("deepEqual", () => {
     });
   });
   describe("compares Maps", () => {
+    class MapVariant extends Map {}
+    const addToVariant = (map: MapVariant, keyValues: any[][]) => {
+      for (const [key, value] of keyValues) map.set(key, value);
+      return map;
+    };
+    it("returns true for two empty maps", () => {
+      const mapA = new Map();
+      const mapB = new Map();
+      expect(deepEqual(mapA, mapB)).toBe(true);
+    });
+    it("returns false for empty maps of different class", () => {
+      const mapA = new Map();
+      const mapB = new MapVariant();
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns true for two maps from same key-value pairs", () => {
+      const mapA = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      const mapB = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(true);
+    });
+    it("returns false for two different-class maps from same key-value pairs", () => {
+      const mapA = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      const mapB = addToVariant(new MapVariant(), [
+        ["a", 1],
+        ["b", 2]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns true for two maps with same key-value pairs but different insertion order", () => {
+      const mapA = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      const mapB = new Map([
+        ["b", 2],
+        ["a", 1]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(true);
+    });
+    it("returns false for map with extra keys", () => {
+      const mapA = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      const mapB = new Map([
+        ["a", 1],
+        ["b", 2],
+        ["c", 3]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns false for map with different values", () => {
+      const mapA = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      const mapB = new Map([
+        ["a", 1],
+        ["b", 3]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns false for map with different keys", () => {
+      const mapA = new Map([
+        ["a", 1],
+        ["b", 2]
+      ]);
+      const mapB = new Map([
+        ["a", 1],
+        ["c", 2]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns true for maps of nested maps of same keys and values", () => {
+      const mapA = new Map([["a", new Map([["b", 1]])]]);
+      const mapB = new Map([["a", new Map([["b", 1]])]]);
+      expect(deepEqual(mapA, mapB)).toBe(true);
+    });
+    it("returns false for maps of nested maps of different keys", () => {
+      const mapA = new Map([["a", new Map([["b", 1]])]]);
+      const mapB = new Map([["a", new Map([["c", 1]])]]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns false for maps of nested maps of extra keys", () => {
+      const mapA = new Map([["a", new Map([["b", 1]])]]);
+      const mapB = new Map([
+        [
+          "a",
+          new Map([
+            ["b", 1],
+            ["c", 2]
+          ])
+        ]
+      ]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns false for maps of nested maps of different values", () => {
+      const mapA = new Map([["a", new Map([["b", 1]])]]);
+      const mapB = new Map([["a", new Map([["b", 2]])]]);
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
+    it("returns false for empty object and map", () => {
+      expect(deepEqual({}, new Map())).toBe(false);
+    });
+    it("returns false for null and map", () => {
+      expect(deepEqual(null, new Map())).toBe(false);
+    });
+    it("returns false for undefined and map", () => {
+      expect(deepEqual(undefined, new Map())).toBe(false);
+    });
+    it("returns false for empty map and map with undefined keys", () => {
+      expect(deepEqual(new Map(), new Map([["a", undefined]]))).toBe(false);
+      expect(deepEqual(new Map([["a", undefined]]), new Map())).toBe(false);
+    });
+    it("returns false for maps with different undefined keys", () => {
+      expect(deepEqual(new Map([["a", undefined]]), new Map([["b", undefined]]))).toBe(false);
+    });
+    it("returns false for map and map-like object", () => {
+      const mapA = new Map([["a", 1]]);
+      const mapB = { constructor: Map, get: () => 1, has: () => true, size: 1 };
+      expect(deepEqual(mapA, mapB)).toBe(false);
+    });
   });
   describe("compares Sets", () => {});
 });
