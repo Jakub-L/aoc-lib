@@ -386,5 +386,60 @@ describe("deepEqual", () => {
       expect(deepEqual(mapA, mapB)).toBe(false);
     });
   });
-  describe("compares Sets", () => {});
+  describe("compares Sets", () => {
+    class SetVariant extends Set {}
+    const addToVariant = (set: SetVariant, values: any[]) => {
+      for (const value of values) set.add(value);
+      return set;
+    };
+    it("returns true for empty sets", () => {
+      expect(deepEqual(new Set(), new Set())).toBe(true);
+    });
+    it("returns false for empty sets of different class", () => {
+      expect(deepEqual(new Set(), new SetVariant())).toBe(false);
+    });
+    it("returns true for same sets with the same insertion order", () => {
+      expect(deepEqual(new Set([1, 2, 3]), new Set([1, 2, 3]))).toBe(true);
+    });
+    it("returns false for same sets of different class with the same insertion order", () => {
+      expect(deepEqual(new Set([1, 2, 3]), addToVariant(new SetVariant(), [1, 2, 3]))).toBe(false);
+    });
+    it("returns true for same sets with the different insertion order", () => {
+      expect(deepEqual(new Set([1, 2, 3]), new Set([3, 2, 1]))).toBe(true);
+  });
+    it("returns false for sets with unequal length", () => {
+      expect(deepEqual(new Set([1, 2, 3]), new Set([1, 2]))).toBe(false);
+    });
+    it("returns false for sets with unequal values", () => {
+      expect(deepEqual(new Set([1, 2, 3]), new Set([1, 2, 4]))).toBe(false);
+    });
+    it("returns false for sets with different references to object values", () => {
+      expect(deepEqual(new Set([{ a: 1 }]), new Set([{ a: 1 }]))).toBe(false);
+    });
+    it("returns true for sets with the same referenced object value", () => {
+      const obj = { a: 1 };
+      expect(deepEqual(new Set([obj]), new Set([obj]))).toBe(true);
+    });
+    it("returns false for empty set and empty object", () => {
+      expect(deepEqual(new Set(), {})).toBe(false);
+    });
+    it("returns false for empty set and empty array", () => {
+      expect(deepEqual(new Set(), [])).toBe(false);
+    });
+    it("returns false for empty set and null", () => {
+      expect(deepEqual(new Set(), null)).toBe(false);
+    });
+    it("returns false for empty set and undefined", () => {
+      expect(deepEqual(new Set(), undefined)).toBe(false);
+    });
+    it("returns false for empty set and set with undefined value", () => {
+      expect(deepEqual(new Set(), new Set([undefined]))).toBe(false);
+      expect(deepEqual(new Set([undefined]), new Set())).toBe(false);
+    });
+    it("returns false for set and set-like object", () => {
+      const setA = new Set([1]);
+      const setB = { constructor: Set, has: () => true, size: 1 };
+      expect(deepEqual(setA, setB)).toBe(false);
+    });
+  });
 });
