@@ -178,6 +178,20 @@ export class DoublyLinkedList<T> {
   }
 
   /**
+   * Returns a reverse iterator for the list.
+   * @returns {IterableIterator<T>} An iterator for the list.
+   */
+  reverse(): IterableIterator<T> {
+    let node = this._tail;
+    return (function* (): IterableIterator<T> {
+      while (node) {
+        yield node.value;
+        node = node.prev;
+      }
+    })();
+  }
+
+  /**
    * Adds a new node with the given value to the end of the list.
    * @param {T} value The value to add to the list.
    * @returns {DoublyLinkedList<T>} The list after insertion
