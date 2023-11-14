@@ -75,11 +75,25 @@ export class DoublyLinkedList<T> {
     }
   }
 
-  removeValue(value: T) {}
+  // removeValue(value: T) {}
 
-  removeAt(index: number) {}
+  // removeAt(index: number) {}
 
-  indexOf(value: T) {}
+  /**
+   * Finds the index of a value in the list. Performs a deep comparison by value.
+   * @param {T} value Value to find
+   * @returns {number} Index of value if found, -1 otherwise
+   */
+  indexOf(value: T): number {
+    let node = this._head;
+    let index = 0;
+    while (node) {
+      if (deepEqual(value, node.value)) return index;
+      node = node.next;
+      index++;
+    }
+    return -1;
+  }
 
   /**
    * Checks if a value exists in the list. Performs a deep comparison by value.
