@@ -177,14 +177,6 @@ export class DoublyLinkedList<T> {
     })();
   }
 
-  *[Symbol.iterator](): IterableIterator<T> {
-    let node = this._head;
-    while (node) {
-      yield node.value;
-      node = node.next;
-    }
-  }
-
   /**
    * Adds a new node with the given value to the end of the list.
    * @param {T} value The value to add to the list.
