@@ -44,9 +44,6 @@ export const deepEqual = (a: any, b: any): boolean => {
     // Symbols
     if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
 
-    // Dates
-    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
-
     // Objects
     if (Object.keys(a).length !== Object.keys(b).length) return false;
     for (const key in a) {
