@@ -157,8 +157,8 @@ describe("DoublyLinkedList", () => {
       const objectList = new DoublyLinkedList<Record<string, number>>();
       objectList.add({ a: 1, b: 2 });
       expect(objectList.includes({ b: 2, a: 1 })).toBe(true);
-    })
-  })
+    });
+  });
   describe("indexOf", () => {
     it("returns -1 for an empty list", () => {
       expect(list.indexOf("a")).toBe(-1);
@@ -181,12 +181,72 @@ describe("DoublyLinkedList", () => {
       const objectList = new DoublyLinkedList<Record<string, number>>();
       objectList.add({ a: 1, b: 2 });
       expect(objectList.indexOf({ b: 2, a: 1 })).toBe(0);
-    })
+    });
     it("returns the first index of a value if it appears multiple times", () => {
       list.add("a");
       list.add("b");
       list.add("a");
       expect(list.indexOf("a")).toBe(0);
+    });
+  });
+  describe("removeValue", () => {
+    it("does nothing for an empty list", () => {
+      list.removeValue("a");
+      expect(list.toString()).toBe("[ ]");
+    });
+    it("removes the only element in a list", () => {
+      list.add("a");
+      expect(list.toString()).toBe("[ a ]");
+      list.removeValue("a");
+      expect(list.toString()).toBe("[ ]");
+    });
+    it("removes the first element in a list", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeValue("a");
+      expect(list.toString()).toBe("[ b ]");
+    });
+    it("removes the last element in a list", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeValue("b");
+      expect(list.toString()).toBe("[ a ]");
+    });
+    it("removes the middle element in a list", () => {
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      expect(list.toString()).toBe("[ a, b, c ]");
+      list.removeValue("b");
+      expect(list.toString()).toBe("[ a, c ]");
+    });
+    it("removes all occurences of a value", () => {
+      list.add("a");
+      list.add("b");
+      list.add("a");
+      list.add("c");
+      list.add("a");
+      expect(list.toString()).toBe("[ a, b, a, c, a ]");
+      list.removeValue("a");
+      expect(list.toString()).toBe("[ b, c ]");
+    });
+    it("removes reference types by value", () => {
+      list.add(["a", "b", "c"]);
+      expect(list.toString()).toBe("[ a,b,c ]");
+      list.removeValue(["a", "b", "c"]);
+      expect(list.toString()).toBe("[ ]");
+    });
+    it("allows chaining of removals", () => {
+      list.add("a");
+      list.add("b");
+      list.add("a");
+      list.add("c");
+      list.add("a");
+      expect(list.toString()).toBe("[ a, b, a, c, a ]");
+      list.removeValue("a").removeValue("b").removeValue("c");
+      expect(list.toString()).toBe("[ ]");
     });
   });
   describe("toString", () => {

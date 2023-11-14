@@ -75,7 +75,25 @@ export class DoublyLinkedList<T> {
     }
   }
 
-  // removeValue(value: T) {}
+  /**
+   * Removes all nodes with a specific value from the list
+   * @param {T} value The value to remove
+   * @returns {DoublyLinkedList<T>} The list after removal
+  */
+  removeValue(value: T): DoublyLinkedList<T> {
+    let node = this._head;
+    while (node) {
+      if (deepEqual(value, node.value)) {
+        if (node === this._head) this._head = node.next;
+        if (node === this._tail) this._tail = node.prev;
+        if (node.prev) node.prev.next = node.next;
+        if (node.next) node.next.prev = node.prev;
+        this._size--;
+      }
+      node = node.next;
+    }
+    return this;
+  }
 
   // removeAt(index: number) {}
 
