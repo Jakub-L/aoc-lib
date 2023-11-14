@@ -79,7 +79,7 @@ export class DoublyLinkedList<T> {
    * Removes all nodes with a specific value from the list
    * @param {T} value The value to remove
    * @returns {DoublyLinkedList<T>} The list after removal
-  */
+   */
   removeValue(value: T): DoublyLinkedList<T> {
     let node = this._head;
     while (node) {
@@ -95,7 +95,28 @@ export class DoublyLinkedList<T> {
     return this;
   }
 
-  // removeAt(index: number) {}
+  /**
+   * Removes a node at a particular index from the list
+   * @param {number} index The index of the node to remove
+   * @returns {DoublyLinkedList<T>} The list after removal
+   */
+  removeAt(index: number): DoublyLinkedList<T> {
+    if (index < 0 || index >= this.size) throw new Error("Index out of bounds");
+    if (index === 0) {
+      this._head = this._head.next;
+      this._head.prev = null;
+    } else if (index === this.size - 1) {
+      this._tail = this._tail.prev;
+      this._tail.next = null;
+    } else {
+      let node = this._head;
+      for (let i = 0; i < index; i++) node = node.next;
+      node.prev.next = node.next;
+      node.next.prev = node.prev;
+    }
+    this._size--;
+    return this;
+  }
 
   /**
    * Finds the index of a value in the list. Performs a deep comparison by value.

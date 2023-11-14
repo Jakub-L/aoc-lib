@@ -207,12 +207,26 @@ describe("DoublyLinkedList", () => {
       list.removeValue("a");
       expect(list.toString()).toBe("[ b ]");
     });
+    it("remaps head if the first element is removed", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeValue("a");
+      expect(list.headValue).toBe("b");
+    });
     it("removes the last element in a list", () => {
       list.add("a");
       list.add("b");
       expect(list.toString()).toBe("[ a, b ]");
       list.removeValue("b");
       expect(list.toString()).toBe("[ a ]");
+    });
+    it("remaps tail if the last element is removed", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeValue("b");
+      expect(list.tailValue).toBe("a");
     });
     it("removes the middle element in a list", () => {
       list.add("a");
@@ -247,6 +261,61 @@ describe("DoublyLinkedList", () => {
       expect(list.toString()).toBe("[ a, b, a, c, a ]");
       list.removeValue("a").removeValue("b").removeValue("c");
       expect(list.toString()).toBe("[ ]");
+    });
+  });
+  describe("removeAt", () => {
+    it("throws an error if given index lower than zero", () => {
+      expect(() => list.removeAt(-1)).toThrow();
+    });
+    it("throws an error if given index greater than size", () => {
+      list.add("a");
+      list.add("b");
+      expect(() => list.removeAt(5)).toThrow();
+    });
+    it("throws an error for an empty list", () => {
+      expect(() => list.removeAt(0)).toThrow();
+    });
+    it("removes the only element in a list", () => {
+      list.add("a");
+      expect(list.toString()).toBe("[ a ]");
+      list.removeAt(0);
+      expect(list.toString()).toBe("[ ]");
+    });
+    it("removes the first element in a list", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeAt(0);
+      expect(list.toString()).toBe("[ b ]");
+    });
+    it("remaps head if the first element is removed", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeAt(0);
+      expect(list.headValue).toBe("b");
+    });
+    it("removes the last element in a list", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeAt(1);
+      expect(list.toString()).toBe("[ a ]");
+    });
+    it("remaps tail if the last element is removed", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeAt(1);
+      expect(list.tailValue).toBe("a");
+    });
+    it("removes the middle element in a list", () => {
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      expect(list.toString()).toBe("[ a, b, c ]");
+      list.removeAt(1);
+      expect(list.toString()).toBe("[ a, c ]");
     });
   });
   describe("toString", () => {
