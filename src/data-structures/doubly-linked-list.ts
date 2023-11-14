@@ -104,10 +104,10 @@ export class DoublyLinkedList<T> {
     if (index < 0 || index >= this.size) throw new Error("Index out of bounds");
     if (index === 0) {
       this._head = this._head.next;
-      this._head.prev = null;
+      if (this._head) this._head.prev = null;
     } else if (index === this.size - 1) {
       this._tail = this._tail.prev;
-      this._tail.next = null;
+      if (this._tail) this._tail.next = null;
     } else {
       let node = this._head;
       for (let i = 0; i < index; i++) node = node.next;
@@ -164,9 +164,19 @@ export class DoublyLinkedList<T> {
   }
 
   /**
-   * Returns an iterator for the list.
+   * Returns a forward iterator for the list.
    * @returns {IterableIterator<T>} An iterator for the list.
    */
+  forward(): IterableIterator<T> {
+    let node = this._head;
+    return (function* (): IterableIterator<T> {
+      while (node) {
+        yield node.value;
+        node = node.next;
+      }
+    })();
+  }
+
   *[Symbol.iterator](): IterableIterator<T> {
     let node = this._head;
     while (node) {

@@ -345,22 +345,22 @@ describe("DoublyLinkedList", () => {
       expect(list.toString()).toBe("[ a, b, c, d ]");
     });
   });
-  describe("iterator", () => {
+  describe("forward (iterator)", () => {
     it("returns an empty iterator for an empty list", () => {
-      const iter = list[Symbol.iterator]();
+      const iter = list.forward();
       expect(iter.next().done).toBe(true);
     });
     it("iterates through a list", () => {
       const arr = ["a", "b", "c", "d"];
       arr.forEach(val => list.add(val));
-      for (const value of list) {
+      for (const value of list.forward()) {
         expect(value).toBe(arr.shift());
       }
     });
     it("iterates through a list in order of nodes, not in order of insertion", () => {
       const expected = ["a", "c", "b"];
       list.addAt(0, "a").addAt(1, "b").addAt(1, "c");
-      for (const value of list) {
+      for (const value of list.forward()) {
         expect(value).toBe(expected.shift());
       }
     });
