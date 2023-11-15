@@ -15,6 +15,18 @@ describe("DoublyLinkedList", () => {
       expect(list.isEmpty).toBe(false);
     });
   });
+  describe("size", () => {
+    it("returns 0 for an empty list", () => {
+      expect(list.size).toBe(0);
+      expect(list.isEmpty).toBe(true);
+    });      
+    it("returns the correct size for a non-empty list", () => {
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      expect(list.size).toBe(3);
+    });
+  })
   describe("headValue", () => {
     it("throws an error for an empty list", () => {
       expect(() => list.headValue).toThrowError();
