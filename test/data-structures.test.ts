@@ -1,4 +1,4 @@
-import { DoublyLinkedList } from "../src/data-structures";
+import { DoublyLinkedList, Queue } from "../src/data-structures";
 
 describe("DoublyLinkedList", () => {
   let list: DoublyLinkedList<string | string[]>;
@@ -317,7 +317,7 @@ describe("DoublyLinkedList", () => {
       list.removeAt(1);
       expect(list.toString()).toBe("[ a, c ]");
     });
-    it("returns the value of the removed node", () => { 
+    it("returns the value of the removed node", () => {
       list.add("a");
       list.add("b");
       list.add("c");
@@ -389,6 +389,118 @@ describe("DoublyLinkedList", () => {
       for (const value of list.reverse()) {
         expect(value).toBe(expected.pop());
       }
+    });
+  });
+});
+describe("Queue", () => {
+  let queue = new Queue<string>();
+  beforeEach(() => {
+    queue = new Queue();
+  });
+  describe("isEmpty", () => {
+    it("returns true for an empty queue", () => {
+      expect(queue.isEmpty).toBe(true);
+    });
+    it("returns false for a non-empty queue", () => {
+      queue.enqueue("a");
+      expect(queue.isEmpty).toBe(false);
+    });
+  });
+  describe("size", () => {
+    it("returns 0 for an empty queue", () => {
+      expect(queue.size).toBe(0);
+      expect(queue.isEmpty).toBe(true);
+    });
+    it("returns the correct size for a non-empty queue", () => {
+      queue.enqueue("a");
+      queue.enqueue("b");
+      queue.enqueue("c");
+      expect(queue.size).toBe(3);
+    });
+  });
+  describe("enqueue", () => {
+    it("adds an element to an empty queue", () => {
+      queue.enqueue("a");
+      expect(queue.toString()).toBe("[ a ]");
+    });
+    it("adds an element to a queue with elements", () => {
+      queue.enqueue("a");
+      queue.enqueue("b");
+      queue.enqueue("c");
+      expect(queue.toString()).toBe("[ a, b, c ]");
+    });
+    it("correctly updates size on insertion", () => {
+      queue.enqueue("a");
+      expect(queue.size).toBe(1);
+      queue.enqueue("b");
+      expect(queue.size).toBe(2);
+      queue.enqueue("c");
+      expect(queue.size).toBe(3);
+    });
+  });
+  describe("dequeue", () => {
+    it("returns undefined for an empty queue", () => {
+      expect(queue.dequeue()).toBeUndefined();
+    });
+    it("returns the only element in a queue", () => {
+      queue.enqueue("a");
+      expect(queue.dequeue()).toBe("a");
+    });
+    it("returns the first element in a queue", () => {
+      queue.enqueue("a");
+      queue.enqueue("b");
+      queue.enqueue("c");
+      expect(queue.dequeue()).toBe("a");
+    });
+    it("dequeues elements in the correct order", () => {
+      queue.enqueue("a");
+      queue.enqueue("b");
+      queue.enqueue("c");
+      expect(queue.dequeue()).toBe("a");
+      expect(queue.dequeue()).toBe("b");
+      expect(queue.dequeue()).toBe("c");
+    });
+  });
+  describe("peek", () => {
+    it("returns undefined for an empty queue", () => {
+      expect(queue.peek()).toBeUndefined();
+    });
+    it("returns the only element in a queue", () => {
+      queue.enqueue("a");
+      expect(queue.peek()).toBe("a");
+    });
+    it("does not remove the element from the queue", () => {
+      queue.enqueue("a");
+      expect(queue.peek()).toBe("a");
+      expect(queue.size).toBe(1);
+    });
+  });
+  describe("toString", () => {
+    it("returns an empty string for an empty queue", () => {
+      expect(queue.toString()).toBe("");
+    });
+    it("returns the first element, stringified, for single-element queue", () => {
+      queue.enqueue("a");
+      expect(queue.toString()).toBe("[ a ]");
+    });
+    it("joins node values with a comma and space", () => {
+      queue.enqueue("a");
+      queue.enqueue("b");
+      expect(queue.toString()).toBe("[ a, b ]");
+    });
+    it("correctly traverses larger queues", () => {
+      for (let i = 1; i <= 10; i++) queue.enqueue(i.toString());
+      expect(queue.toString()).toBe("[ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]");
+    });
+    it("correctly generates strings throughout queueing process", () => {
+      expect(queue.toString()).toBe("");
+      queue.enqueue("a");
+      expect(queue.toString()).toBe("[ a ]");
+      queue.enqueue("b");
+      queue.enqueue("c");
+      expect(queue.toString()).toBe("[ a, b, c ]");
+      queue.dequeue();
+      expect(queue.toString()).toBe("[ b, c ]");
     });
   });
 });
