@@ -317,6 +317,12 @@ describe("DoublyLinkedList", () => {
       list.removeAt(1);
       expect(list.toString()).toBe("[ a, c ]");
     });
+    it("returns the value of the removed node", () => { 
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      expect(list.removeAt(1)).toBe("b");
+    });
   });
   describe("toString", () => {
     it("returns an empty string for an empty list", () => {

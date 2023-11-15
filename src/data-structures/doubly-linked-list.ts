@@ -98,24 +98,27 @@ export class DoublyLinkedList<T> {
   /**
    * Removes a node at a particular index from the list
    * @param {number} index The index of the node to remove
-   * @returns {DoublyLinkedList<T>} The list after removal
+   * @returns {T} The value of the removed node
    */
-  removeAt(index: number): DoublyLinkedList<T> {
+  removeAt(index: number): T {
     if (index < 0 || index >= this.size) throw new Error("Index out of bounds");
+    let node
     if (index === 0) {
+      node = this._head;
       this._head = this._head.next;
       if (this._head) this._head.prev = null;
     } else if (index === this.size - 1) {
+      node = this._tail;
       this._tail = this._tail.prev;
       if (this._tail) this._tail.next = null;
     } else {
-      let node = this._head;
+      node = this._head;
       for (let i = 0; i < index; i++) node = node.next;
       node.prev.next = node.next;
       node.next.prev = node.prev;
     }
     this._size--;
-    return this;
+    return node.value;
   }
 
   /**
