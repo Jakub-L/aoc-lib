@@ -5,7 +5,7 @@
  * @returns {Set<T | U>} Set of all elements in A or in B (or in both)
  */
 export const union = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
-  return new Set();
+  return new Set([...A, ...B]);
 };
 
 /**
