@@ -1,6 +1,6 @@
 import {
-  intersection,
   union,
+  intersection,
   difference,
   symmetricDifference,
   isDisjointFrom,
@@ -55,3 +55,45 @@ describe("union", () => {
     expect(union(A, A)).toEqual(A);
   });
 });
+
+describe("difference", () => {
+  it("returns empty set for two empty sets", () => {
+    const A = new Set();
+    const B = new Set();
+    const result = new Set();
+    expect(difference(A, B)).toEqual(result);
+  });
+  it("returns set A for empty set B", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set();
+    expect(difference(A, B)).toEqual(A);
+  });
+  it("returns empty set for empty set A", () => {
+    const A = new Set();
+    const B = new Set([1, 2, 3]);
+    expect(difference(A, B)).toEqual(A);
+  });
+  it("returns empty set for two equal sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([1, 2, 3]);
+    const result = new Set();
+    expect(difference(A, B)).toEqual(result);
+  });
+  it("returns empty set for two copies of the same set", () => {
+    const A = new Set([1, 2, 3]);
+    const result = new Set();
+    expect(difference(A, A)).toEqual(result);
+  });
+  it("returns set A for disjoint sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([4, 5, 6]);
+    const result = new Set([1, 2, 3]);
+    expect(difference(A, B)).toEqual(result);
+  });
+  it("returns set difference for sets with shared elements", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([2, 3, 4]);
+    const result = new Set([1]);
+    expect(difference(A, B)).toEqual(result);
+  });
+})

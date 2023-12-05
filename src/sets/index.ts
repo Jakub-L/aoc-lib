@@ -15,7 +15,7 @@ export const union = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
  * @returns {Set<T | U>} Set of all elements in A, but not in B
  */
 export const difference = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
-  return new Set();
+  return new Set([...A].filter(x => !B.has(x as any)));
 };
 
 /**
