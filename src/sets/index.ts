@@ -35,7 +35,7 @@ export const symmetricDifference = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
  * @returns {Set<T | U>} Set of all elements both in A and in B
  */
 export const intersection = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
-  return new Set();
+  return new Set([...A].filter(x => B.has(x as any)));
 };
 
 /**

@@ -95,7 +95,7 @@ describe("difference", () => {
     const result = new Set([1]);
     expect(difference(A, B)).toEqual(result);
   });
-})
+});
 describe("symmetricDifference", () => {
   it("returns empty set for two empty sets", () => {
     const A = new Set();
@@ -108,7 +108,7 @@ describe("symmetricDifference", () => {
     const B = new Set();
     expect(symmetricDifference(A, B)).toEqual(A);
   });
-  it("is commutative", () => { 
+  it("is commutative", () => {
     const A = new Set([1, 2, 3]);
     const B = new Set([4, 5, 6]);
     expect(symmetricDifference(A, B)).toEqual(symmetricDifference(B, A));
@@ -118,12 +118,12 @@ describe("symmetricDifference", () => {
     const B = new Set([1, 2, 3]);
     const result = new Set();
     expect(symmetricDifference(A, B)).toEqual(result);
-  })
+  });
   it("returns empty set for two copies of the same set", () => {
     const A = new Set([1, 2, 3]);
     const result = new Set();
     expect(symmetricDifference(A, A)).toEqual(result);
-  })
+  });
   it("returns union of sets for disjoint sets", () => {
     const A = new Set([1, 2, 3]);
     const B = new Set([4, 5, 6]);
@@ -137,11 +137,46 @@ describe("symmetricDifference", () => {
     expect(symmetricDifference(A, B)).toEqual(result);
   });
 });
-xdescribe("intersection", () => {
+describe("intersection", () => {
+  it("returns empty set for two empty sets", () => {
+    const A = new Set();
+    const B = new Set();
+    const result = new Set();
+    expect(intersection(A, B)).toEqual(result);
+  });
+  it("returns empty set for empty set B", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set();
+    const result = new Set();
+    expect(intersection(A, B)).toEqual(result);
+  });
+  it("returns empty set for empty set A", () => {
+    const A = new Set();
+    const B = new Set([1, 2, 3]);
+    const result = new Set();
+    expect(intersection(A, B)).toEqual(result);
+  });
+  it("returns set A for two equal sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([1, 2, 3]);
+    expect(intersection(A, B)).toEqual(A);
+  });
+  it("returns set A for two copies of the same set", () => {
+    const A = new Set([1, 2, 3]);
+    expect(intersection(A, A)).toEqual(A);
+  });
+  it("returns elements shared by both sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([2, 3, 4]);
+    const result = new Set([2, 3]);
+    expect(intersection(A, B)).toEqual(result);
+  });
+  it("is commutative", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([2, 3, 4]);
+    expect(intersection(A, B)).toEqual(intersection(B, A));
+  });
 });
-xdescribe("isDisjointFrom", () => {
-});
-xdescribe("isSubsetOf", () => {
-});
-xdescribe("isProperSubsetOf", () => {
-});
+xdescribe("isDisjointFrom", () => {});
+xdescribe("isSubsetOf", () => {});
+xdescribe("isProperSubsetOf", () => {});
