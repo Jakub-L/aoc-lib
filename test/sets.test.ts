@@ -177,6 +177,41 @@ describe("intersection", () => {
     expect(intersection(A, B)).toEqual(intersection(B, A));
   });
 });
-xdescribe("isDisjointFrom", () => {});
+describe("isDisjointFrom", () => {
+  it("returns true for two empty sets", () => {
+    const A = new Set();
+    const B = new Set();
+    expect(isDisjointFrom(A, B)).toEqual(true);
+  });
+  it("returns true for empty set B", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set();
+    expect(isDisjointFrom(A, B)).toEqual(true);
+  });
+  it("returns true for empty set A", () => {
+    const A = new Set();
+    const B = new Set([1, 2, 3]);
+    expect(isDisjointFrom(A, B)).toEqual(true);
+  });
+  it("returns false for two equal sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([1, 2, 3]);
+    expect(isDisjointFrom(A, B)).toEqual(false);
+  });
+  it("returns false for two copies of the same set", () => {
+    const A = new Set([1, 2, 3]);
+    expect(isDisjointFrom(A, A)).toEqual(false);
+  });
+  it("returns true for disjoint sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([4, 5, 6]);
+    expect(isDisjointFrom(A, B)).toEqual(true);
+  });
+  it("returns false for sets with shared elements", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([2, 3, 4]);
+    expect(isDisjointFrom(A, B)).toEqual(false);
+  });
+});
 xdescribe("isSubsetOf", () => {});
 xdescribe("isProperSubsetOf", () => {});

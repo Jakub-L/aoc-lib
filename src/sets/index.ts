@@ -15,7 +15,7 @@ export const union = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
  * @returns {Set<T | U>} Set of all elements in A, but not in B
  */
 export const difference = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
-  return new Set([...A].filter(x => !B.has(x as any)));
+  return new Set([...A].filter(element => !B.has(element as any)));
 };
 
 /**
@@ -35,7 +35,7 @@ export const symmetricDifference = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
  * @returns {Set<T | U>} Set of all elements both in A and in B
  */
 export const intersection = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
-  return new Set([...A].filter(x => B.has(x as any)));
+  return new Set([...A].filter(element => B.has(element as any)));
 };
 
 /**
@@ -45,6 +45,9 @@ export const intersection = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
  * @returns {boolean} True if A and B share no elements
  */
 export const isDisjointFrom = <T, U>(A: Set<T>, B: Set<U>): boolean => {
+  for (const element of A) {
+    if (B.has(element as any)) return false;
+  }
   return true;
 };
 
