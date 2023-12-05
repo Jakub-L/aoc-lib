@@ -249,4 +249,39 @@ describe("isSubsetOf", () => {
     expect(isSubsetOf(A, B)).toEqual(false);
   });
 });
-xdescribe("isProperSubsetOf", () => {});
+describe("isProperSubsetOf", () => {
+  it("returns false for two empty sets", () => {
+    const A = new Set();
+    const B = new Set();
+    expect(isProperSubsetOf(A, B)).toEqual(false);
+  });
+  it("returns true for empty set as a subset of any non-empty set", () => {
+    const A = new Set();
+    const B = new Set([1, 2, 3]);
+    expect(isProperSubsetOf(A, B)).toEqual(true);
+  });
+  it("returns false for two equal sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([1, 2, 3]);
+    expect(isProperSubsetOf(A, B)).toEqual(false);
+  });
+  it("returns false for two copies of the same set", () => {
+    const A = new Set([1, 2, 3]);
+    expect(isProperSubsetOf(A, A)).toEqual(false);
+  });
+  it("returns true for proper subset", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([1, 2, 3, 4]);
+    expect(isProperSubsetOf(A, B)).toEqual(true);
+  });
+  it("returns false for if A has some, but not all elements in B", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([2, 3, 4]);
+    expect(isProperSubsetOf(A, B)).toEqual(false);
+  });
+  it("returns false for disjoint sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([4, 5, 6]);
+    expect(isProperSubsetOf(A, B)).toEqual(false);
+  });
+});

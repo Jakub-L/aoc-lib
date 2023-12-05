@@ -71,5 +71,6 @@ export const isSubsetOf = <T, U>(A: Set<T>, B: Set<U>): boolean => {
  * @returns {boolean} True if all elements of A are in B, but A is not equal to B
  */
 export const isProperSubsetOf = <T, U>(A: Set<T>, B: Set<U>): boolean => {
-  return true;
+  if (A.size >= B.size) return false;
+  return isSubsetOf(A, B);
 };
