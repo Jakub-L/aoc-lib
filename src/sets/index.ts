@@ -25,7 +25,7 @@ export const difference = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
  * @returns {Set<T | U>} Set of all elements in A or in B (but not in both)
  */
 export const symmetricDifference = <T, U>(A: Set<T>, B: Set<U>): Set<T | U> => {
-  return new Set();
+  return union(difference(A, B), difference(B, A));
 };
 
 /**

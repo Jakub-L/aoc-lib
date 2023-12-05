@@ -1,8 +1,8 @@
 import {
   union,
-  intersection,
   difference,
   symmetricDifference,
+  intersection,
   isDisjointFrom,
   isSubsetOf,
   isProperSubsetOf
@@ -55,7 +55,6 @@ describe("union", () => {
     expect(union(A, A)).toEqual(A);
   });
 });
-
 describe("difference", () => {
   it("returns empty set for two empty sets", () => {
     const A = new Set();
@@ -97,3 +96,52 @@ describe("difference", () => {
     expect(difference(A, B)).toEqual(result);
   });
 })
+describe("symmetricDifference", () => {
+  it("returns empty set for two empty sets", () => {
+    const A = new Set();
+    const B = new Set();
+    const result = new Set();
+    expect(symmetricDifference(A, B)).toEqual(result);
+  });
+  it("returns set A for empty set B", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set();
+    expect(symmetricDifference(A, B)).toEqual(A);
+  });
+  it("is commutative", () => { 
+    const A = new Set([1, 2, 3]);
+    const B = new Set([4, 5, 6]);
+    expect(symmetricDifference(A, B)).toEqual(symmetricDifference(B, A));
+  });
+  it("returns empty set for two equal sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([1, 2, 3]);
+    const result = new Set();
+    expect(symmetricDifference(A, B)).toEqual(result);
+  })
+  it("returns empty set for two copies of the same set", () => {
+    const A = new Set([1, 2, 3]);
+    const result = new Set();
+    expect(symmetricDifference(A, A)).toEqual(result);
+  })
+  it("returns union of sets for disjoint sets", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([4, 5, 6]);
+    const result = new Set([1, 2, 3, 4, 5, 6]);
+    expect(symmetricDifference(A, B)).toEqual(result);
+  });
+  it("returns elements in A and B but not both", () => {
+    const A = new Set([1, 2, 3]);
+    const B = new Set([2, 3, 4]);
+    const result = new Set([1, 4]);
+    expect(symmetricDifference(A, B)).toEqual(result);
+  });
+});
+xdescribe("intersection", () => {
+});
+xdescribe("isDisjointFrom", () => {
+});
+xdescribe("isSubsetOf", () => {
+});
+xdescribe("isProperSubsetOf", () => {
+});
