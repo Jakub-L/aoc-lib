@@ -58,6 +58,9 @@ export const isDisjointFrom = <T, U>(A: Set<T>, B: Set<U>): boolean => {
  * @returns {boolean} True if all elements of A are in B
  */
 export const isSubsetOf = <T, U>(A: Set<T>, B: Set<U>): boolean => {
+  for (const element of A) {
+    if (!B.has(element as any)) return false;
+  }
   return true;
 };
 
