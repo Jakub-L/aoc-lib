@@ -8,13 +8,7 @@ export class Counter {
   }
 
   // Adds element to the counter
-  increment(element: any) {}
-
-  // Removes element from the counter (decrements the counter)
-  decrement(element: any) {}
-
-  // Deletes an element from the counter entirely
-  delete(element: any) {}
+  add(element: any) {}
 
   // Returns the count of a given element
   get(element: any) {}
@@ -22,14 +16,14 @@ export class Counter {
   // Sets the count of a given element
   set(element: any, count: number) {}
 
+  // Deletes an element from the counter entirely
+  delete(element: any) {}
+
   // Checks if the counter contains an element
   has(element: any) {}
 
   // Clears the counter
   clear() {}
-
-  // Iterates over elements, repeating them as many times as their count
-  elements() {}
 
   // Returns the n most common elements and their counts. If N is ommitted, returns all elements
   mostCommon(n?: number) {}
@@ -38,18 +32,13 @@ export class Counter {
   subtract(other: Iterable) {}
 
   // Adds elements from the other counter to this counter
-  union(other: Iterable) {}
-
-  // Returns the total count of all elements
-  total() {}
+  combine(other: Iterable) {}
 
   // Returns a string representation
   toString() {}
 
-  // Returns the number of unique elements
-  get size() {
-    return null;
-  }
+  // Iterates over elements, repeating them as many times as their count
+  elements() {}
 
   // Returns the elements, iterator
   keys() {}
@@ -62,4 +51,14 @@ export class Counter {
 
   // Generic iterator, same as entries
   *[Symbol.iterator](): IterableIterator<[any, number]> {}
+
+  // Returns the number of unique elements, even if their value is zero
+  get size() {
+    return null;
+  }
+
+  // Returns the total count of all elements
+  get total() {
+    return null
+  }
 }
