@@ -9,6 +9,7 @@
     "./input-parsing": "./lib/input-parsing/index.js",
     "./pathfinding": "./lib/pathfinding/index.js",
     "./data-structures": "./lib/data-structures/index.js",
+    "./collections": "./lib/collections/index.js",
     "./math": "./lib/math/index.js"
   },
   "typesVersions": {
@@ -21,6 +22,9 @@
       ],
       "data-structures": [
         "./lib/data-structures/index.d.ts"
+      ],
+      "collections": [
+        "./lib/collections/index.d.ts"
       ],
       "math": [
         "./lib/math/index.d.ts"
