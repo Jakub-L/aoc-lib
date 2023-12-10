@@ -577,13 +577,146 @@ describe("Counter", () => {
       expect(counter.total).toEqual(2);
     });
   });
-  describe("combine", () => {});
-  describe("toString", () => {});
-  describe("elements", () => {});
-  describe("keys", () => {});
-  describe("values", () => {});
-  describe("entries", () => {});
-  describe("Generic iterator", () => {});
+  describe("combine", () => {
+    it("accepts array as argument", () => {
+      const counter = new Counter([1, 1, 3]);
+      counter.combine([1, 2]);
+      expect(counter.get(1)).toEqual(3);
+      expect(counter.get(2)).toEqual(1);
+      expect(counter.get(3)).toEqual(1);
+    });
+    it("accepts object as argument", () => {
+      const counter = new Counter([1, 1, 3]);
+      counter.combine({ 1: 1, 2: 2 });
+      expect(counter.get(1)).toEqual(3);
+      expect(counter.get(2)).toEqual(2);
+      expect(counter.get(3)).toEqual(1);
+    });
+    it("accepts another counter as argument", () => {
+      const counter1 = new Counter([1, 1, 3]);
+      const counter2 = new Counter([1, 2]);
+      counter1.combine(counter2);
+      expect(counter1.get(1)).toEqual(3);
+      expect(counter1.get(2)).toEqual(1);
+      expect(counter1.get(3)).toEqual(1);
+    });
+    it("does not change the original counter if argument is empty", () => {
+      const counter = new Counter([1, 1, 3]);
+      counter.combine([]);
+      expect(counter.get(1)).toEqual(2);
+      counter.combine({});
+      expect(counter.get(1)).toEqual(2);
+      counter.combine(new Counter());
+      expect(counter.get(1)).toEqual(2);
+    });
+    it("updates the size", () => {
+      const counter = new Counter([1, 1, 3]);
+      expect(counter.size).toEqual(2);
+      counter.combine([1, 2]);
+      expect(counter.size).toEqual(3);
+    });
+    it("updates the total", () => {
+      const counter = new Counter([1, 1, 3]);
+      expect(counter.total).toEqual(3);
+      counter.combine([1]);
+      expect(counter.total).toEqual(4);
+    });
+  });
+  describe("toString", () => {
+    it("returns a string representation", () => {
+      const counter = new Counter([1, 1, 3]);
+      expect(counter.toString()).toEqual("Counter({1: 2, 3: 1})");
+    });
+    it("returns a string representation for empty counter", () => {
+      const counter = new Counter();
+      expect(counter.toString()).toEqual("Counter({})");
+    });
+  });
+  describe("elements", () => {
+    it("returns an empty iterator for an empty list", () => {
+      const iter = new Counter().elements();
+      expect(iter.next().done).toBe(true);
+    });
+    it("iterates through the counter repeating each element as much as there were elements", () => {
+      const counter = new Counter([1, 1, 1, 2, 3, 2]);
+      const iter = Array.from(counter.elements());
+      expect(iter).toEqual([1, 1, 1, 2, 2, 3]);
+    });
+    it("iterates through in order of insertion", () => {
+      const counter = new Counter([1, 1, 1, 3, 2, 2]);
+      const iter = Array.from(counter.elements());
+      expect(iter).toEqual([1, 1, 1, 2, 2, 2]);
+    });
+  });
+  describe("keys", () => {
+    it("returns an empty iterator for an empty list", () => {
+      const iter = new Counter().keys();
+      expect(iter.next().done).toBe(true);
+    });
+    it("iterates through the counter's keys", () => {
+      const counter = new Counter([1, 1, 1, 2, 3, 2]);
+      const iter = Array.from(counter.keys());
+      expect(iter).toEqual([1, 2, 3]);
+    });
+    it("iterates through in order of insertion", () => {
+      const counter = new Counter([1, 1, 1, 3, 2, 2]);
+      const iter = Array.from(counter.keys());
+      expect(iter).toEqual([1, 3, 2]);
+    });
+  });
+  describe("values", () => {
+    it("returns an empty iterator for an empty list", () => {
+      const iter = new Counter().values();
+      expect(iter.next().done).toBe(true);
+    });
+    it("iterates through the counter's values", () => {
+      const counter = new Counter([1, 1, 1, 2, 3, 2]);
+      const iter = Array.from(counter.values());
+      expect(iter).toEqual([3, 2, 1]);
+    });
+    it("iterates through in order of key insertion", () => {
+      const counter = new Counter([1, 1, 1, 3, 2, 2]);
+      const iter = Array.from(counter.values());
+      expect(iter).toEqual([3, 1, 2]);
+    });
+  });
+  describe("entries", () => {
+    it("returns an empty iterator for an empty list", () => {
+      const iter = new Counter().entries();
+      expect(iter.next().done).toBe(true);
+    });
+    it("iterates through the counter's [key, count] pairs", () => {
+      const counter = new Counter(["a", "a", "a", "b", "c", "b"]);
+      const iter = Array.from(counter.entries());
+      expect(iter).toEqual([
+        ["a", 3],
+        ["b", 2],
+        ["c", 1]
+      ]);
+    });
+    it("iterates through in order of key insertion", () => {
+      const counter = new Counter(["a", "a", "a", "b", "c", "b"]);
+      const iter = Array.from(counter.entries());
+      expect(iter).toEqual([
+        ["a", 3],
+        ["b", 2],
+        ["c", 1]
+      ]);
+    });
+  });
+  describe("Generic iterator", () => {
+    it("iterates through the counter's [key, count] pairs", () => {
+      const counter = new Counter(["a", "a", "a", "b", "c", "b"]);
+      const expected = [
+        ["a", 3],
+        ["b", 2],
+        ["c", 1]
+      ];
+      for (const entry of counter) {
+        expect(expected.shift()).toEqual(entry);
+      }
+    });
+  });
   describe("size", () => {
     it("returns 0 for empty counter", () => {
       const counter = new Counter();
