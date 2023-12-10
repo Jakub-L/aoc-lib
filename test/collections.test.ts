@@ -541,11 +541,11 @@ describe("Counter", () => {
       expect(counter.get(3)).toEqual(1);
     });
     it("accepts object as argument", () => {
-      const counter = new Counter([1, 1, 3]);
-      counter.subtract({ 1: 1, 2: 2 });
-      expect(counter.get(1)).toEqual(0);
-      expect(counter.get(2)).toEqual(-2);
-      expect(counter.get(3)).toEqual(1);
+      const counter = new Counter(["a", "a", "c"]);
+      counter.subtract({ a: 1, b: 2 });
+      expect(counter.get("a")).toEqual(1);
+      expect(counter.get("b")).toEqual(-2);
+      expect(counter.get("c")).toEqual(1);
     });
     it("accepts another counter as argument", () => {
       const counter1 = new Counter([1, 1, 3]);
@@ -586,11 +586,11 @@ describe("Counter", () => {
       expect(counter.get(3)).toEqual(1);
     });
     it("accepts object as argument", () => {
-      const counter = new Counter([1, 1, 3]);
-      counter.combine({ 1: 1, 2: 2 });
-      expect(counter.get(1)).toEqual(3);
-      expect(counter.get(2)).toEqual(2);
-      expect(counter.get(3)).toEqual(1);
+      const counter = new Counter(["a", "a", "c"]);
+      counter.combine({ a: 1, b: 2 });
+      expect(counter.get("a")).toEqual(3);
+      expect(counter.get("b")).toEqual(2);
+      expect(counter.get("c")).toEqual(1);
     });
     it("accepts another counter as argument", () => {
       const counter1 = new Counter([1, 1, 3]);
@@ -645,7 +645,7 @@ describe("Counter", () => {
     it("iterates through in order of insertion", () => {
       const counter = new Counter([1, 1, 1, 3, 2, 2]);
       const iter = Array.from(counter.elements());
-      expect(iter).toEqual([1, 1, 1, 2, 2, 2]);
+      expect(iter).toEqual([1, 1, 1, 3, 2, 2]);
     });
   });
   describe("keys", () => {
