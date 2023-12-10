@@ -480,8 +480,103 @@ describe("Counter", () => {
       expect(counter.total).toEqual(0);
     });
   });
-  describe("mostCommon", () => {});
-  describe("subtract", () => {});
+  describe("mostCommon", () => {
+    it("returns an empty array for empty counter", () => {
+      const counter = new Counter();
+      expect(counter.mostCommon()).toEqual([]);
+    });
+    it("returns array of [element, count] pairs", () => {
+      const counter = new Counter(["a", "a", "b"]);
+      expect(counter.mostCommon()).toEqual([
+        ["a", 2],
+        ["b", 1]
+      ]);
+    });
+    it("returns the top n elements", () => {
+      const counter = new Counter(["a", "a", "b", "b", "c"]);
+      expect(counter.mostCommon(2)).toEqual([
+        ["a", 2],
+        ["b", 2]
+      ]);
+    });
+    it("returns all elements if n is greater than size", () => {
+      const counter = new Counter(["a", "a", "b", "b", "c"]);
+      expect(counter.mostCommon(5)).toEqual([
+        ["a", 2],
+        ["b", 2],
+        ["c", 1]
+      ]);
+    });
+    it("returns empty array if n is zero", () => {
+      const counter = new Counter(["a", "a", "b", "b", "c"]);
+      expect(counter.mostCommon(0)).toEqual([]);
+    });
+    it("returns empty array if n is negative", () => {
+      const counter = new Counter(["a", "a", "b", "b", "c"]);
+      expect(counter.mostCommon(-1)).toEqual([]);
+    });
+    it("returns all elements if n is not provided", () => {
+      const counter = new Counter(["a", "a", "b", "b", "c"]);
+      expect(counter.mostCommon()).toEqual([
+        ["a", 2],
+        ["b", 2],
+        ["c", 1]
+      ]);
+    });
+    it("returns elements in order of insertion if counts are equal", () => {
+      const counter = new Counter(["a", "a", "b", "b", "c"]);
+      expect(counter.mostCommon()).toEqual([
+        ["a", 2],
+        ["b", 2],
+        ["c", 1]
+      ]);
+    });
+  });
+  describe("subtract", () => {
+    it("accepts array as argument", () => {
+      const counter = new Counter([1, 1, 3]);
+      counter.subtract([1, 2]);
+      expect(counter.get(1)).toEqual(1);
+      expect(counter.get(2)).toEqual(-1);
+      expect(counter.get(3)).toEqual(1);
+    });
+    it("accepts object as argument", () => {
+      const counter = new Counter([1, 1, 3]);
+      counter.subtract({ 1: 1, 2: 2 });
+      expect(counter.get(1)).toEqual(0);
+      expect(counter.get(2)).toEqual(-2);
+      expect(counter.get(3)).toEqual(1);
+    });
+    it("accepts another counter as argument", () => {
+      const counter1 = new Counter([1, 1, 3]);
+      const counter2 = new Counter([1, 2]);
+      counter1.subtract(counter2);
+      expect(counter1.get(1)).toEqual(1);
+      expect(counter1.get(2)).toEqual(-1);
+      expect(counter1.get(3)).toEqual(1);
+    });
+    it("does not change the original counter if argument is empty", () => {
+      const counter = new Counter([1, 1, 3]);
+      counter.subtract([]);
+      expect(counter.get(1)).toEqual(2);
+      counter.subtract({});
+      expect(counter.get(1)).toEqual(2);
+      counter.subtract(new Counter());
+      expect(counter.get(1)).toEqual(2);
+    });
+    it("updates the size", () => {
+      const counter = new Counter([1, 1, 3]);
+      expect(counter.size).toEqual(2);
+      counter.subtract([1, 2]);
+      expect(counter.size).toEqual(3);
+    });
+    it("updates the total", () => {
+      const counter = new Counter([1, 1, 3]);
+      expect(counter.total).toEqual(3);
+      counter.subtract([1]);
+      expect(counter.total).toEqual(2);
+    });
+  });
   describe("combine", () => {});
   describe("toString", () => {});
   describe("elements", () => {});
