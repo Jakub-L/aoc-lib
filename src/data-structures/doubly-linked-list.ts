@@ -81,9 +81,18 @@ export class DoublyLinkedList<T> {
    * @returns {DoublyLinkedList<T>} The list after removal
    */
   removeValue(value: T): DoublyLinkedList<T> {
+    return this.removeBy(v => deepEqual(v, value));
+  }
+
+  /**
+   * Removes all nodes passing a predicate from the list
+   * @param {T => boolean} predicate - Function to run on each value in the list
+   * @returns {DoublyLinkedList<T>} The list after removal
+   */
+  removeBy(predicate: (value: T) => boolean): DoublyLinkedList<T> {
     let node = this._head;
     while (node) {
-      if (deepEqual(value, node.value)) {
+      if (predicate(node.value)) {
         if (node === this._head) this._head = node.next;
         if (node === this._tail) this._tail = node.prev;
         if (node.prev) node.prev.next = node.next;
@@ -102,7 +111,7 @@ export class DoublyLinkedList<T> {
    */
   removeAt(index: number): T {
     if (index < 0 || index >= this.size) throw new Error("Index out of bounds");
-    let node
+    let node;
     if (index === 0) {
       node = this._head;
       this._head = this._head.next;
@@ -138,6 +147,21 @@ export class DoublyLinkedList<T> {
   }
 
   /**
+   * Finds the first node in the list whose value passes the predicate
+   * @param {T => boolean} predicate - Comparator function
+   * @returns {T | null} The value of the first node passing the predicate, null if
+   *      no node passes the predicate
+   */
+  findBy(predicate: (value: T) => boolean): T | null {
+    let node = this._head;
+    while (node) {
+      if (predicate(node.value)) return node.value;
+      node = node.next;
+    }
+    return null;
+  }
+
+  /**
    * Checks if a value exists in the list. Performs a deep comparison by value.
    * @param {T} value Value to find in the list
    * @returns {boolean} True if value exists in the list, false otherwise
@@ -146,6 +170,20 @@ export class DoublyLinkedList<T> {
     let node = this._head;
     while (node) {
       if (deepEqual(value, node.value)) return true;
+      node = node.next;
+    }
+    return false;
+  }
+
+  /**
+   * Checks if a value passing a predicate is included in the list.
+   * @param {T => boolean} predicate - Function to run on each value in the list
+   * @returns {boolean} True if predicate returns true for any value in the list, false otherwise
+   */
+  includesBy(predicate: (value: T) => boolean): boolean {
+    let node = this._head;
+    while (node) {
+      if (predicate(node.value)) return true;
       node = node.next;
     }
     return false;

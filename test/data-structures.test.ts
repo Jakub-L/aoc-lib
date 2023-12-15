@@ -19,14 +19,14 @@ describe("DoublyLinkedList", () => {
     it("returns 0 for an empty list", () => {
       expect(list.size).toBe(0);
       expect(list.isEmpty).toBe(true);
-    });      
+    });
     it("returns the correct size for a non-empty list", () => {
       list.add("a");
       list.add("b");
       list.add("c");
       expect(list.size).toBe(3);
     });
-  })
+  });
   describe("headValue", () => {
     it("throws an error for an empty list", () => {
       expect(() => list.headValue).toThrowError();
@@ -171,6 +171,26 @@ describe("DoublyLinkedList", () => {
       expect(objectList.includes({ b: 2, a: 1 })).toBe(true);
     });
   });
+  describe("includesBy", () => {
+    it("returns false for an empty list and any predicate", () => {
+      expect(list.includesBy(val => val === "a")).toBe(false);
+    });
+    it("returns true for an element passing predicate in list", () => {
+      list.add("a");
+      expect(list.includesBy(val => val === "a")).toBe(true);
+    });
+    it("returns false for an element not passing predicate in list", () => {
+      list.add("a");
+      expect(list.includesBy(val => val === "b")).toBe(false);
+    });
+    it("allows checking nested properties of objects", () => {
+      const objectList = new DoublyLinkedList<Record<string, number>>();
+      objectList.add({ a: 1, b: 2 });
+      objectList.add({ a: 1, b: 4 });
+      expect(objectList.includesBy(val => val.b === 4)).toBe(true);
+      expect(objectList.includesBy(val => val.b === 3)).toBe(false);
+    });
+  });
   describe("indexOf", () => {
     it("returns -1 for an empty list", () => {
       expect(list.indexOf("a")).toBe(-1);
@@ -275,6 +295,49 @@ describe("DoublyLinkedList", () => {
       expect(list.toString()).toBe("[ ]");
     });
   });
+  describe("removeBy", () => {
+    it("does nothing for an empty list", () => {
+      list.removeBy(val => val === "a");
+      expect(list.toString()).toBe("[ ]");
+    });
+    it("removes the only element passing a predicate in a list", () => {
+      list.add("a");
+      expect(list.toString()).toBe("[ a ]");
+      list.removeBy(val => val === "a");
+      expect(list.toString()).toBe("[ ]");
+    });
+    it("removes the all elements passing predicate in a list", () => {
+      list.add("a");
+      list.add("b");
+      list.add("a");
+      expect(list.toString()).toBe("[ a, b, a ]");
+      list.removeBy(val => val === "a");
+      expect(list.toString()).toBe("[ b ]");
+    });
+    it("remaps head if the first element is removed", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeBy(val => val === "a");
+      expect(list.headValue).toBe("b");
+    });
+    it("remaps tail if the last element is removed", () => {
+      list.add("a");
+      list.add("b");
+      expect(list.toString()).toBe("[ a, b ]");
+      list.removeBy(val => val === "b");
+      expect(list.tailValue).toBe("a");
+    });
+    it("allows checking nested properties of objects", () => {
+      const objectList = new DoublyLinkedList<Record<string, number>>();
+      objectList.add({ a: 1, b: 2 });
+      objectList.add({ a: 1, b: 4 });
+      objectList.add({ a: 2, b: 4 });
+      objectList.removeBy(val => val.a === 1);
+      expect(objectList.headValue).toEqual({ a: 2, b: 4 });
+      expect(objectList.size).toBe(1);
+    });
+  });
   describe("removeAt", () => {
     it("throws an error if given index lower than zero", () => {
       expect(() => list.removeAt(-1)).toThrow();
@@ -334,6 +397,33 @@ describe("DoublyLinkedList", () => {
       list.add("b");
       list.add("c");
       expect(list.removeAt(1)).toBe("b");
+    });
+  });
+  describe("findBy", () => {
+    it("returns null for an empty list", () => {
+      expect(list.findBy(val => val === "a")).toBeNull();
+    });
+    it("returns null for list with no elements passing predicate", () => {
+      list.add("a");
+      expect(list.findBy(val => val === "b")).toBeNull();
+    });
+    it("returns the first element passing predicate", () => {
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      expect(list.findBy(val => val === "b")).toBe("b");
+    });
+    it("allows checking nested properties of objects", () => {
+      const objectList = new DoublyLinkedList<Record<string, number>>();
+      objectList.add({ a: 1, b: 2 });
+      objectList.add({ a: 1, b: 4 });
+      expect(objectList.findBy(val => val.b === 4)).toEqual({ a: 1, b: 4 });
+    });
+    it("returns the first passing object", () => {
+      const objectList = new DoublyLinkedList<Record<string, number>>();
+      objectList.add({ a: 1, b: 2 });
+      objectList.add({ a: 1, b: 4 });
+      expect(objectList.findBy(val => val.a === 1)).toEqual({ a: 1, b: 2 });
     });
   });
   describe("toString", () => {
