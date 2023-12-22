@@ -1,4 +1,4 @@
-import { DoublyLinkedList, Queue } from "../src/data-structures";
+import { DoublyLinkedList, MinHeap, Queue } from "../src/data-structures";
 
 describe("DoublyLinkedList", () => {
   let list: DoublyLinkedList<string | string[]>;
@@ -491,6 +491,267 @@ describe("DoublyLinkedList", () => {
       for (const value of list.reverse()) {
         expect(value).toBe(expected.pop());
       }
+    });
+  });
+});
+describe.only("MinHeap", () => {
+  describe("constructor", () => {
+    it("creates an empty heap if no arguments are provided", () => {
+      const heap = new MinHeap();
+      expect(heap.size).toBe(0);
+    });
+    it("creates a heap from an array of numbers", () => {
+      const heap = new MinHeap([5, 3, 1, 4, 2]);
+      expect(heap.size).toBe(5);
+    });
+    it("creates a heap from an array of nodes", () => {
+      const heap = new MinHeap([
+        { priority: 5, val: "a" },
+        { priority: 3, val: "b" }
+      ]);
+      expect(heap.size).toBe(2);
+    });
+    it("orders elements if given array of numbers", () => {
+      const heap = new MinHeap([5, 3, 1, 4, 2]);
+      expect(heap.pop()).toBe(1);
+      expect(heap.pop()).toBe(2);
+      expect(heap.pop()).toBe(3);
+    });
+    it("orders elements if given array of nodes", () => {
+      const heap = new MinHeap([
+        { priority: 5, val: "a" },
+        { priority: 3, val: "b" }
+      ]);
+      expect(heap.pop()).toEqual({ priority: 3, val: "b" });
+      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
+    });
+  });
+  describe("add", () => {
+    it("adds a new node to an empty heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.size).toBe(1);
+      expect(heap.peek()).toBe(5);
+    });
+    it("inserts element to the front of heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.add(3);
+      expect(heap.size).toBe(2);
+      expect(heap.peek()).toBe(3);
+    });
+    it("inserts element to the middle of heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.add(3);
+      heap.add(1);
+      expect(heap.size).toBe(3);
+      expect(heap.pop()).toBe(1);
+      expect(heap.pop()).toBe(3);
+      expect(heap.pop()).toBe(5);
+    });
+    it("inserts element to the end of heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.add(3);
+      heap.add(1);
+      heap.add(4);
+      expect(heap.size).toBe(4);
+      expect(heap.pop()).toBe(1);
+      expect(heap.pop()).toBe(3);
+      expect(heap.pop()).toBe(4);
+      expect(heap.pop()).toBe(5);
+    });
+    it("updates size on insertion", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.size).toBe(1);
+      heap.add(3);
+      expect(heap.size).toBe(2);
+      heap.add(1);
+      expect(heap.size).toBe(3);
+      heap.add(4);
+      expect(heap.size).toBe(4);
+    });
+    it("handles Node additions", () => {
+      const heap = new MinHeap<string>();
+      heap.add({ priority: 5, val: "a" });
+      expect(heap.size).toBe(1);
+      expect(heap.peek()).toEqual({ priority: 5, val: "a" });
+    });
+  });
+  describe("pop", () => {
+    it("returns null for an empty heap", () => {
+      const heap = new MinHeap();
+      expect(heap.pop()).toBeNull();
+    });
+    it("returns the only element in a heap", () => {
+      const heap = new MinHeap([5]);
+      expect(heap.pop()).toBe(5);
+    });
+    it("reduces size on removal", () => {
+      const heap = new MinHeap([5]);
+      expect(heap.size).toBe(1);
+      heap.pop();
+      expect(heap.size).toBe(0);
+    });
+    it("returns whole node if element is a Node", () => {
+      const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
+      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
+    });
+  });
+  describe("peek", () => {
+    it("returns null for empty heap", () => {
+      const heap = new MinHeap();
+      expect(heap.peek()).toBeNull();
+    });
+    it("returns number for number-type heap", () => {
+      const heap = new MinHeap([5]);
+      expect(heap.peek()).toBe(5);
+    });
+    it("returns Node for Node-type heap", () => {
+      const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
+      expect(heap.peek()).toEqual({ priority: 5, val: "a" });
+    });
+    it("returns first element in heap", () => {
+      const heap = new MinHeap([5, 3, 1]);
+      expect(heap.peek()).toBe(1);
+    });
+    it("does not affect size", () => {
+      const heap = new MinHeap([5]);
+      expect(heap.size).toBe(1);
+      heap.peek();
+      expect(heap.size).toBe(1);
+    });
+    it("does not remove element from heap", () => {
+      const heap = new MinHeap([5]);
+      expect(heap.peek()).toBe(5);
+      expect(heap.peek()).toBe(5);
+    });
+  });
+  describe("includes", () => {
+    it("returns false for an empty heap", () => {
+      const heap = new MinHeap();
+      expect(heap.includes(5)).toBe(false);
+    });
+    it("returns true for a number present in a heap", () => {
+      const heap = new MinHeap([5]);
+      expect(heap.includes(5)).toBe(true);
+    });
+    it("returns false for a number not present in a heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.includes(6)).toBe(false);
+    });
+    it("returns true for a node present in a heap, by comparing values", () => {
+      const heap = new MinHeap<string>();
+      heap.add({ priority: 5, val: "a" });
+      expect(heap.includes("a")).toBe(true);
+    });
+    it("returns false for a node not present in a heap, by comparing values", () => {
+      const heap = new MinHeap<string>();
+      heap.add({ priority: 5, val: "a" });
+      expect(heap.includes("b")).toBe(false);
+    });
+    it("returns true for an object type node present in heap, deep-comparing by value", () => {
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
+      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      expect(heap.includes({ a: 1, b: { c: 1, d: 3 } })).toBe(true);
+    });
+    it("returns false for an object type node not present in heap, deep-comparing by value", () => {
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
+      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      expect(heap.includes({ a: 1, b: { c: 0, d: 3 } })).toBe(false);
+    });
+  });
+  describe("remove", () => {
+    it("returns false for an empty heap", () => {
+      const heap = new MinHeap();
+      expect(heap.remove(5)).toBe(false);
+    });
+    it("returns true for a number present in a heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.remove(5)).toBe(true);
+    });
+    it("returns false for a number not present in a heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.remove(6)).toBe(false);
+    });
+    it("returns true for a node present in a heap, by comparing values", () => {
+      const heap = new MinHeap<string>();
+      heap.add({ priority: 5, val: "a" });
+      expect(heap.remove("a")).toBe(true);
+    });
+    it("returns false for a node not present in a heap, by comparing values", () => {
+      const heap = new MinHeap<string>();
+      heap.add({ priority: 5, val: "a" });
+      expect(heap.remove("b")).toBe(false);
+    });
+    it("returns true for an object type node present in heap, deep-comparing by value", () => {
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
+      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      expect(heap.remove({ a: 1, b: { c: 1, d: 3 } })).toBe(true);
+    });
+    it("returns false for an object type node not present in heap, deep-comparing by value", () => {
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
+      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      expect(heap.remove({ a: 1, b: { c: 0, d: 3 } })).toBe(false);
+    });
+    it("correctly updates size on removal", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.size).toBe(1);
+      expect(heap.isEmpty).toBe(false);
+      heap.remove(5);
+      expect(heap.size).toBe(0);
+      expect(heap.isEmpty).toBe(true);
+    });
+    it("removes top of heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.add(3);
+      heap.add(1);
+      expect(heap.peek()).toBe(1);
+      heap.remove(1);
+      expect(heap.peek()).toBe(3);
+    });
+  });
+  describe("size", () => {
+    it("returns 0 for an empty heap", () => {
+      const heap = new MinHeap();
+      expect(heap.size).toBe(0);
+    });
+    it("returns the size for a non-empty heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.add(3);
+      heap.add(1);
+      expect(heap.size).toBe(3);
+    });
+  });
+  describe("isEmpty", () => {
+    it("returns true for an empty heap", () => {
+      const heap = new MinHeap();
+      expect(heap.isEmpty).toBe(true);
+    });
+    it("returns false for a non-empty heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      expect(heap.isEmpty).toBe(false);
+    });
+    it("returns true after popping all elements from heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.pop();
+      expect(heap.isEmpty).toBe(true);
+    });
+    it("returns true after removing all elements from heap", () => {
+      const heap = new MinHeap();
+      heap.add(5);
+      heap.remove(5);
+      expect(heap.isEmpty).toBe(true);
     });
   });
 });

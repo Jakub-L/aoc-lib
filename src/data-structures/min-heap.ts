@@ -21,7 +21,7 @@ export class MinHeap<T = number> {
       if (typeof element === "number") this.add({ priority: element, val: element as T });
       else this.add(element);
     }
-    for (let i = Math.max(0, array.length / 2 - 1); i >= 0; i--) this._sink(i);
+    for (let i = Math.max(0, Math.ceil(array.length / 2) - 1); i >= 0; i--) this._sink(i);
   }
 
   /**
@@ -51,7 +51,8 @@ export class MinHeap<T = number> {
    */
   peek(): number | Node<T> | null {
     if (this.isEmpty) return null;
-    return this._heap[0];
+    const value = this._heap.get(0);
+    return value.priority === value.val ? value.priority : value;
   }
 
   /**
@@ -91,7 +92,7 @@ export class MinHeap<T = number> {
     if (index >= this.size) return null;
 
     const lastIndex = this.size - 1;
-    const removedNode = this._heap[index];
+    const removedNode = this._heap.get(index);
     this._swap(index, lastIndex);
     this._heap.delete(lastIndex);
 
@@ -99,9 +100,9 @@ export class MinHeap<T = number> {
     if (index === lastIndex) return removedNode;
 
     // Otherwise, we need to sink or swim the node at index
-    const node = this._heap[index];
+    const node = this._heap.get(index);
     this._sink(index);
-    if (deepEqual(this._heap[index], node)) this._swim(index);
+    if (deepEqual(this._heap.get(index), node)) this._swim(index);
 
     return removedNode;
   }
@@ -140,7 +141,9 @@ export class MinHeap<T = number> {
    */
   private _swap(i: number, j: number) {
     if (i >= this.size || j >= this.size) throw new RangeError("Index out of bounds");
-    [this._heap[i], this._heap[j]] = [this._heap[j], this._heap[i]];
+    const [a, b] = [this._heap.get(i), this._heap.get(j)];
+    this._heap.set(i, b);
+    this._heap.set(j, a);
   }
 
   /**
@@ -152,7 +155,7 @@ export class MinHeap<T = number> {
    */
   private _less(i: number, j: number): boolean {
     if (i >= this.size || j >= this.size) throw new RangeError("Index out of bounds");
-    return this._heap[i].priority < this._heap[j].priority;
+    return this._heap.get(i).priority < this._heap.get(j).priority;
   }
 
   /** The number of elements in the heap */
