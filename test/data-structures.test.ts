@@ -494,7 +494,7 @@ describe("DoublyLinkedList", () => {
     });
   });
 });
-describe.only("MinHeap", () => {
+describe("MinHeap", () => {
   describe("constructor", () => {
     it("creates an empty heap if no arguments are provided", () => {
       const heap = new MinHeap();
@@ -503,6 +503,10 @@ describe.only("MinHeap", () => {
     it("creates a heap from an array of numbers", () => {
       const heap = new MinHeap([5, 3, 1, 4, 2]);
       expect(heap.size).toBe(5);
+    });
+    it("allows repetitions in the array", () => {
+      const heap = new MinHeap([5, 3, 1, 4, 2, 1, 2, 3, 4, 5]);
+      expect(heap.size).toBe(10);
     });
     it("creates a heap from an array of nodes", () => {
       const heap = new MinHeap([
@@ -579,6 +583,12 @@ describe.only("MinHeap", () => {
       expect(heap.size).toBe(1);
       expect(heap.peek()).toEqual({ priority: 5, val: "a" });
     });
+    it("handles duplicate Node additions", () => {
+      const heap = new MinHeap<string>();
+      heap.add({ priority: 5, val: "a" });
+      heap.add({ priority: 5, val: "a" });
+      expect(heap.size).toBe(2);
+    });
   });
   describe("pop", () => {
     it("returns null for an empty heap", () => {
@@ -597,6 +607,14 @@ describe.only("MinHeap", () => {
     });
     it("returns whole node if element is a Node", () => {
       const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
+      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
+    });
+    it("handles duplicate nodes", () => {
+      const heap = new MinHeap<string>([
+        { priority: 5, val: "a" },
+        { priority: 5, val: "a" }
+      ]);
+      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
       expect(heap.pop()).toEqual({ priority: 5, val: "a" });
     });
   });
@@ -716,6 +734,13 @@ describe.only("MinHeap", () => {
       expect(heap.peek()).toBe(1);
       heap.remove(1);
       expect(heap.peek()).toBe(3);
+    });
+    it("removes the first occurence of a value", () => {
+      const heap = new MinHeap([1, 2, 3, 3, 4, 5]);
+      expect(heap.size).toBe(6);
+      heap.remove(3);
+      expect(heap.size).toBe(5);
+      expect(heap.includes(3)).toBe(true);
     });
   });
   describe("size", () => {
