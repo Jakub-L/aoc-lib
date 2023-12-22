@@ -508,11 +508,8 @@ describe("MinHeap", () => {
       const heap = new MinHeap([5, 3, 1, 4, 2, 1, 2, 3, 4, 5]);
       expect(heap.size).toBe(10);
     });
-    it("creates a heap from an array of nodes", () => {
-      const heap = new MinHeap([
-        { priority: 5, val: "a" },
-        { priority: 3, val: "b" }
-      ]);
+    it("creates a heap from an array of strings", () => {
+      const heap = new MinHeap<string>(["a", "b"], val => val.charCodeAt(0));
       expect(heap.size).toBe(2);
     });
     it("orders elements if given array of numbers", () => {
@@ -521,13 +518,18 @@ describe("MinHeap", () => {
       expect(heap.pop()).toBe(2);
       expect(heap.pop()).toBe(3);
     });
-    it("orders elements if given array of nodes", () => {
-      const heap = new MinHeap([
-        { priority: 5, val: "a" },
-        { priority: 3, val: "b" }
-      ]);
-      expect(heap.pop()).toEqual("b");
-      expect(heap.pop()).toEqual("a");
+    it("correctly compares object types according to mapper function", () => {
+      const heap = new MinHeap<Record<string, number>>(
+        [
+          { a: 1, b: 2 },
+          { a: 1, b: 4 },
+          { a: 2, b: 4 }
+        ],
+        val => val.a + val.b
+      );
+      expect(heap.pop()).toEqual({ a: 1, b: 2 });
+      expect(heap.pop()).toEqual({ a: 1, b: 4 });
+      expect(heap.pop()).toEqual({ a: 2, b: 4 });
     });
   });
   describe("add", () => {
@@ -577,16 +579,16 @@ describe("MinHeap", () => {
       heap.add(4);
       expect(heap.size).toBe(4);
     });
-    it("handles Node additions", () => {
-      const heap = new MinHeap<string>();
-      heap.add({ priority: 5, val: "a" });
+    it("handles non-number type additions", () => {
+      const heap = new MinHeap<string>([], val => val.charCodeAt(0));
+      heap.add("a");
       expect(heap.size).toBe(1);
       expect(heap.peek()).toEqual("a");
     });
-    it("handles duplicate Node additions", () => {
-      const heap = new MinHeap<string>();
-      heap.add({ priority: 5, val: "a" });
-      heap.add({ priority: 5, val: "a" });
+    it("handles duplicate non-number type additions", () => {
+      const heap = new MinHeap<string>([], val => val.charCodeAt(0));
+      heap.add("a");
+      heap.add("a");
       expect(heap.size).toBe(2);
     });
   });
@@ -606,14 +608,11 @@ describe("MinHeap", () => {
       expect(heap.size).toBe(0);
     });
     it("returns whole node if element is a Node", () => {
-      const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
+      const heap = new MinHeap<string>(["a"], val => val.charCodeAt(0));
       expect(heap.pop()).toEqual("a");
     });
     it("handles duplicate nodes", () => {
-      const heap = new MinHeap<string>([
-        { priority: 5, val: "a" },
-        { priority: 5, val: "a" }
-      ]);
+      const heap = new MinHeap<string>(["a", "a"], val => val.charCodeAt(0));
       expect(heap.pop()).toEqual("a");
       expect(heap.pop()).toEqual("a");
     });
@@ -628,7 +627,7 @@ describe("MinHeap", () => {
       expect(heap.peek()).toBe(5);
     });
     it("returns Node for Node-type heap", () => {
-      const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
+      const heap = new MinHeap<string>(["a"], val => val.charCodeAt(0));
       expect(heap.peek()).toEqual("a");
     });
     it("returns first element in heap", () => {
@@ -662,23 +661,23 @@ describe("MinHeap", () => {
       expect(heap.includes(6)).toBe(false);
     });
     it("returns true for a node present in a heap, by comparing values", () => {
-      const heap = new MinHeap<string>();
-      heap.add({ priority: 5, val: "a" });
+      const heap = new MinHeap<string>([], val => val.charCodeAt(0));
+      heap.add("a");
       expect(heap.includes("a")).toBe(true);
     });
     it("returns false for a node not present in a heap, by comparing values", () => {
-      const heap = new MinHeap<string>();
-      heap.add({ priority: 5, val: "a" });
+      const heap = new MinHeap<string>([], val => val.charCodeAt(0));
+      heap.add("a");
       expect(heap.includes("b")).toBe(false);
     });
     it("returns true for an object type node present in heap, deep-comparing by value", () => {
-      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
-      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>([], () => 1);
+      heap.add({ a: 1, b: { c: 1, d: 3 } });
       expect(heap.includes({ a: 1, b: { c: 1, d: 3 } })).toBe(true);
     });
     it("returns false for an object type node not present in heap, deep-comparing by value", () => {
-      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
-      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>([], () => 1);
+      heap.add({ a: 1, b: { c: 1, d: 3 } });
       expect(heap.includes({ a: 1, b: { c: 0, d: 3 } })).toBe(false);
     });
   });
@@ -698,23 +697,23 @@ describe("MinHeap", () => {
       expect(heap.remove(6)).toBe(false);
     });
     it("returns true for a node present in a heap, by comparing values", () => {
-      const heap = new MinHeap<string>();
-      heap.add({ priority: 5, val: "a" });
+      const heap = new MinHeap<string>([], val => val.charCodeAt(0));
+      heap.add("a");
       expect(heap.remove("a")).toBe(true);
     });
     it("returns false for a node not present in a heap, by comparing values", () => {
-      const heap = new MinHeap<string>();
-      heap.add({ priority: 5, val: "a" });
+      const heap = new MinHeap<string>([], val => val.charCodeAt(0));
+      heap.add("a");
       expect(heap.remove("b")).toBe(false);
     });
     it("returns true for an object type node present in heap, deep-comparing by value", () => {
-      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
-      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>([], () => 1);
+      heap.add({ a: 1, b: { c: 1, d: 3 } });
       expect(heap.remove({ a: 1, b: { c: 1, d: 3 } })).toBe(true);
     });
     it("returns false for an object type node not present in heap, deep-comparing by value", () => {
-      const heap = new MinHeap<Record<string, number | Record<string, number>>>();
-      heap.add({ priority: 1, val: { a: 1, b: { c: 1, d: 3 } } });
+      const heap = new MinHeap<Record<string, number | Record<string, number>>>([], () => 1);
+      heap.add({ a: 1, b: { c: 1, d: 3 } });
       expect(heap.remove({ a: 1, b: { c: 0, d: 3 } })).toBe(false);
     });
     it("correctly updates size on removal", () => {

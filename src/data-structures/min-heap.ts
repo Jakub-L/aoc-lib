@@ -10,27 +10,28 @@ interface Node<T> {
 export class MinHeap<T = number> {
   /** The underlying data structure used to store the heap */
   private _heap: Map<number, Node<T>> = new Map();
+  /** Function that maps an input value to a priority value */
+  private _priorityMapper: (val: T) => number = val => val as number;
 
   /**
    * Creates a new min-heap. If an array of numbers is provided, each number will be added to the
    * heap with a priority equal to its value.
-   * @param {number | Node<T>} [array=[]] - An array of numbers or nodes to add to the heap
+   * @param {T} [array=[]] - An array of elements to add to the heap
+   * @param {PriorityMapper} [priorityMapper] - A function that maps an input value to a priority value.
+   *      Required for non-number types.
    */
-  constructor(array: number[] | Node<T>[] = []) {
-    for (const element of array) {
-      if (typeof element === "number") this.add({ priority: element, val: element as T });
-      else this.add(element);
-    }
+  constructor(array: T[] = [], priorityMapper?: (val: T) => number) {
+    if (priorityMapper) this._priorityMapper = priorityMapper;
+    for (const value of array) this.add(value);
     for (let i = Math.max(0, Math.ceil(array.length / 2) - 1); i >= 0; i--) this._sink(i);
   }
 
   /**
    * Adds a new node to the heap. If a number is provided, the node's priority will be equal to its value.
-   * @param {number | Node<T>} elem - A number or node to add to the heap
+   * @param {T} value - A value to add to the heap
    */
-  add(elem: number | Node<T>) {
-    if (typeof elem === "number") elem = { priority: elem, val: elem as T };
-    this._heap.set(this.size, elem);
+  add(value: T) {
+    this._heap.set(this.size, { priority: this._priorityMapper(value), val: value });
     this._swim(this.size - 1);
   }
 
