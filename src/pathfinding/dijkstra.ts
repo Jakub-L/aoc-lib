@@ -1,8 +1,13 @@
+import { MinHeap } from "../data-structures";
+
 type GridDijkstraOptions = {
   start?: number[];
   end?: number[];
   allowDiagonals?: boolean;
 };
+
+type QueueValue = { x: number; y: number; dist: number };
+type QueueNode = { priority: number; val: QueueValue };
 
 /**
  * Searches through a grid of numbers using Dijkstra's algorithm to find the shortest path between
@@ -20,10 +25,10 @@ export const gridDijkstra = (grid: number[][], options: GridDijkstraOptions = {}
   const visited = new Set();
   const [y0, x0] = start;
   const [yt, xt] = end;
-  const queue = [{ x: x0, y: y0, dist: 0 }];
+  const queue: MinHeap<QueueValue> = new MinHeap([{ priority: 0, val: { x: x0, y: y0, dist: 0 } }]);
 
-  while (queue.length) {
-    const { x, y, dist } = queue.shift();
+  while (!queue.isEmpty) {
+    const { x, y, dist } = (queue.pop() as QueueNode).val;
     // If we made it to the end, return distance to it
     if (x === xt && y === yt) return dist;
     // Otherwise, check every neighbour
@@ -33,10 +38,9 @@ export const gridDijkstra = (grid: number[][], options: GridDijkstraOptions = {}
       if (grid[yy]?.[xx] === undefined || visited.has(`${xx},${yy}`)) continue;
       // Otherwise mark the point as visited and add it to the queue of vertices to check
       visited.add(`${xx},${yy}`);
-      queue.push({ x: xx, y: yy, dist: dist + grid[yy][xx] });
+      const newDist = dist + grid[yy][xx];
+      queue.add({ priority: newDist, val: { x: xx, y: yy, dist: newDist } });
     }
-    // Sort the queue to find the shortest-distance vertex to inspect next
-    queue.sort((a, b) => a.dist - b.dist);
   }
   return -1;
 };
