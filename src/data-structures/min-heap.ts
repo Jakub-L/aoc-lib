@@ -89,8 +89,6 @@ export class MinHeap<T = number> {
    * @returns {Node<T> | null} The removed node, or null if the index is out of bounds
    */
   private _removeAt(index: number): Node<T> | null {
-    if (index >= this.size) return null;
-
     const lastIndex = this.size - 1;
     const removedNode = this._heap.get(index);
     this._swap(index, lastIndex);
@@ -140,7 +138,6 @@ export class MinHeap<T = number> {
    * @throws {RangeError} If either index is out of bounds
    */
   private _swap(i: number, j: number) {
-    if (i >= this.size || j >= this.size) throw new RangeError("Index out of bounds");
     const [a, b] = [this._heap.get(i), this._heap.get(j)];
     this._heap.set(i, b);
     this._heap.set(j, a);
@@ -154,7 +151,6 @@ export class MinHeap<T = number> {
    * @throws {RangeError} If either index is out of bounds
    */
   private _less(i: number, j: number): boolean {
-    if (i >= this.size || j >= this.size) throw new RangeError("Index out of bounds");
     return this._heap.get(i).priority < this._heap.get(j).priority;
   }
 
