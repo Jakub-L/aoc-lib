@@ -526,8 +526,8 @@ describe("MinHeap", () => {
         { priority: 5, val: "a" },
         { priority: 3, val: "b" }
       ]);
-      expect(heap.pop()).toEqual({ priority: 3, val: "b" });
-      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
+      expect(heap.pop()).toEqual("b");
+      expect(heap.pop()).toEqual("a");
     });
   });
   describe("add", () => {
@@ -581,7 +581,7 @@ describe("MinHeap", () => {
       const heap = new MinHeap<string>();
       heap.add({ priority: 5, val: "a" });
       expect(heap.size).toBe(1);
-      expect(heap.peek()).toEqual({ priority: 5, val: "a" });
+      expect(heap.peek()).toEqual("a");
     });
     it("handles duplicate Node additions", () => {
       const heap = new MinHeap<string>();
@@ -607,15 +607,15 @@ describe("MinHeap", () => {
     });
     it("returns whole node if element is a Node", () => {
       const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
-      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
+      expect(heap.pop()).toEqual("a");
     });
     it("handles duplicate nodes", () => {
       const heap = new MinHeap<string>([
         { priority: 5, val: "a" },
         { priority: 5, val: "a" }
       ]);
-      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
-      expect(heap.pop()).toEqual({ priority: 5, val: "a" });
+      expect(heap.pop()).toEqual("a");
+      expect(heap.pop()).toEqual("a");
     });
   });
   describe("peek", () => {
@@ -629,7 +629,7 @@ describe("MinHeap", () => {
     });
     it("returns Node for Node-type heap", () => {
       const heap = new MinHeap<string>([{ priority: 5, val: "a" }]);
-      expect(heap.peek()).toEqual({ priority: 5, val: "a" });
+      expect(heap.peek()).toEqual("a");
     });
     it("returns first element in heap", () => {
       const heap = new MinHeap([5, 3, 1]);

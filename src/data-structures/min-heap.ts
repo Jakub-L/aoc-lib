@@ -36,23 +36,20 @@ export class MinHeap<T = number> {
 
   /**
    * Returns the root of the heap (the value with the lowest priority) and removes it from the heap.
-   * @returns {number | Node<T> | null} The node with the lowest priority, or null if the heap is empty
+   * @returns {T | null} The value of the node with the lowest priority, or null if the heap is empty
    */
-  pop(): number | Node<T> | null {
+  pop(): T | null {
     if (this.isEmpty) return null;
-    const result = this._removeAt(0);
-    if (result.priority === result.val) return result.priority;
-    return result;
+    return this._removeAt(0).val;
   }
 
   /**
    * Returns the root of the heap (the value with the lowest priority) without removing it from the heap.
-   * @returns {number | Node<T> | null} The node with the lowest priority, or null if the heap is empty
+   * @returns {T | null} The value of the node with the lowest priority, or null if the heap is empty
    */
-  peek(): number | Node<T> | null {
+  peek(): T | null {
     if (this.isEmpty) return null;
-    const value = this._heap.get(0);
-    return value.priority === value.val ? value.priority : value;
+    return this._heap.get(0).val;
   }
 
   /**
