@@ -164,3 +164,5 @@ export class MinHeap<T = number> {
     return this.size === 0;
   }
 }
+
+export const PriorityQueue = MinHeap;
