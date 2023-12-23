@@ -10,6 +10,7 @@
     "./pathfinding": "./lib/pathfinding/index.js",
     "./data-structures": "./lib/data-structures/index.js",
     "./collections": "./lib/collections/index.js",
+    "./utils": "./lib/utils/index.js",
     "./math": "./lib/math/index.js"
   },
   "typesVersions": {
@@ -25,6 +26,9 @@
       ],
       "collections": [
         "./lib/collections/index.d.ts"
+      ],
+      "utils": [
+        "./lib/utils/index.d.ts"
       ],
       "math": [
         "./lib/math/index.d.ts"
