@@ -780,25 +780,36 @@ describe("MinHeap", () => {
   });
 });
 describe("Queue", () => {
-  let queue = new Queue<string>();
-  beforeEach(() => {
-    queue = new Queue();
+  describe("constructor", () => {
+    it("creates an empty queue if no arguments are provided", () => {
+      const queue = new Queue();
+      expect(queue.size).toBe(0);
+    });
+    it("creates a queue from an array of numbers", () => {
+      const queue = new Queue([1, 2, 3]);
+      expect(queue.size).toBe(3);
+      expect(queue.peek()).toBe(1);
+    });
   });
   describe("isEmpty", () => {
     it("returns true for an empty queue", () => {
+      const queue = new Queue();
       expect(queue.isEmpty).toBe(true);
     });
     it("returns false for a non-empty queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.isEmpty).toBe(false);
     });
   });
   describe("size", () => {
     it("returns 0 for an empty queue", () => {
+      const queue = new Queue();
       expect(queue.size).toBe(0);
       expect(queue.isEmpty).toBe(true);
     });
     it("returns the correct size for a non-empty queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       queue.enqueue("b");
       queue.enqueue("c");
@@ -807,16 +818,19 @@ describe("Queue", () => {
   });
   describe("enqueue", () => {
     it("adds an element to an empty queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.toString()).toBe("[ a ]");
     });
     it("adds an element to a queue with elements", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       queue.enqueue("b");
       queue.enqueue("c");
       expect(queue.toString()).toBe("[ a, b, c ]");
     });
     it("correctly updates size on insertion", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.size).toBe(1);
       queue.enqueue("b");
@@ -827,19 +841,23 @@ describe("Queue", () => {
   });
   describe("dequeue", () => {
     it("returns undefined for an empty queue", () => {
+      const queue = new Queue();
       expect(queue.dequeue()).toBeUndefined();
     });
     it("returns the only element in a queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.dequeue()).toBe("a");
     });
     it("returns the first element in a queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       queue.enqueue("b");
       queue.enqueue("c");
       expect(queue.dequeue()).toBe("a");
     });
     it("dequeues elements in the correct order", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       queue.enqueue("b");
       queue.enqueue("c");
@@ -850,13 +868,16 @@ describe("Queue", () => {
   });
   describe("peek", () => {
     it("returns undefined for an empty queue", () => {
+      const queue = new Queue();
       expect(queue.peek()).toBeUndefined();
     });
     it("returns the only element in a queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.peek()).toBe("a");
     });
     it("does not remove the element from the queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.peek()).toBe("a");
       expect(queue.size).toBe(1);
@@ -864,22 +885,27 @@ describe("Queue", () => {
   });
   describe("toString", () => {
     it("returns an empty string for an empty queue", () => {
+      const queue = new Queue();
       expect(queue.toString()).toBe("");
     });
     it("returns the first element, stringified, for single-element queue", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       expect(queue.toString()).toBe("[ a ]");
     });
     it("joins node values with a comma and space", () => {
+      const queue = new Queue();
       queue.enqueue("a");
       queue.enqueue("b");
       expect(queue.toString()).toBe("[ a, b ]");
     });
     it("correctly traverses larger queues", () => {
+      const queue = new Queue();
       for (let i = 1; i <= 10; i++) queue.enqueue(i.toString());
       expect(queue.toString()).toBe("[ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]");
     });
     it("correctly generates strings throughout queueing process", () => {
+      const queue = new Queue();
       expect(queue.toString()).toBe("");
       queue.enqueue("a");
       expect(queue.toString()).toBe("[ a ]");

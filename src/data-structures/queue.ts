@@ -6,6 +6,10 @@
 export class Queue<T> {
   private _queue: T[] = [];
 
+  constructor(initialValues?: T[]) {
+    if (initialValues) this._queue = initialValues;
+  }
+
   /**
    * Adds an element to the end of the queue.
    * @param {T} value The value to add.
