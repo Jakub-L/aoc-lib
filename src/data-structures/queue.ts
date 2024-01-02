@@ -40,7 +40,7 @@ export class Queue<T> {
    */
   toString(): string {
     if (this.isEmpty) return "";
-    return `[ ${this._queue.join(", ")} ]`;
+    return `[ ${this._queue.map(e => (typeof e === "object" ? JSON.stringify(e) : e)).join(", ")} ]`;
   }
 
   /**

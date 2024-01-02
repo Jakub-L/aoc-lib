@@ -790,6 +790,10 @@ describe("Queue", () => {
       expect(queue.size).toBe(3);
       expect(queue.peek()).toBe(1);
     });
+    it("allows repeated values in constructor", () => {
+      const queue = new Queue([1, 2, 3, 1, 2, 3]);
+      expect(queue.size).toBe(6);
+    });
   });
   describe("isEmpty", () => {
     it("returns true for an empty queue", () => {
@@ -814,11 +818,15 @@ describe("Queue", () => {
   });
   describe("enqueue", () => {
     it("adds an element to an empty queue", () => {
-      const queue = new Queue(["a"]);
+      const queue = new Queue();
+      queue.enqueue("a");
       expect(queue.toString()).toBe("[ a ]");
     });
     it("adds an element to a queue with elements", () => {
-      const queue = new Queue(["a", "b", "c"]);
+      const queue = new Queue();
+      queue.enqueue("a");
+      queue.enqueue("b");
+      queue.enqueue("c");
       expect(queue.toString()).toBe("[ a, b, c ]");
     });
     it("correctly updates size on insertion", () => {
@@ -828,6 +836,13 @@ describe("Queue", () => {
       queue.enqueue("b");
       expect(queue.size).toBe(2);
       queue.enqueue("c");
+      expect(queue.size).toBe(3);
+    });
+    it("correctly enqueues duplicate elements", () => {
+      const queue = new Queue();
+      queue.enqueue("a");
+      queue.enqueue("a");
+      queue.enqueue("a");
       expect(queue.size).toBe(3);
     });
   });
@@ -893,6 +908,20 @@ describe("Queue", () => {
       expect(queue.toString()).toBe("[ a, b, c ]");
       queue.dequeue();
       expect(queue.toString()).toBe("[ b, c ]");
+    });
+    it("displays array types in bracketed form", () => {
+      const queue = new Queue([
+        [1, 2, 3],
+        [4, 5, 6]
+      ]);
+      expect(queue.toString()).toBe("[ [1,2,3], [4,5,6] ]");
+    });
+    it("displays object types in bracketed form", () => {
+      const queue = new Queue([
+        { a: 1, b: 2 },
+        { c: 3, d: 4 }
+      ]);
+      expect(queue.toString()).toBe('[ {"a":1,"b":2}, {"c":3,"d":4} ]');
     });
   });
 });
